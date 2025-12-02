@@ -1,0 +1,6 @@
+C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\CapaModelo\bin\Debug\CapaModelo.dll
+C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\CapaModelo\bin\Debug\CapaModelo.pdb
+C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\CapaModelo\obj\Debug\CapaModelo.csproj.AssemblyReference.cache
+C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\CapaModelo\obj\Debug\CapaModelo.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\CapaModelo\obj\Debug\CapaModelo.dll
+C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\CapaModelo\obj\Debug\CapaModelo.pdb
