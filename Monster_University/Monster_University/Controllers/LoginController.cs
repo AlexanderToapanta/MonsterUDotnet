@@ -19,7 +19,6 @@ namespace Monster_University.Controllers
             return View();
         }
 
-        // POST: Login/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(string XEUSU_NOMBRE, string XEUSU_CONTRA)
@@ -29,44 +28,42 @@ namespace Monster_University.Controllers
             if (respuesta.estado)
             {
                 FormsAuthentication.SetAuthCookie(XEUSU_NOMBRE, false);
-                Session["Usuario"] = XEUSU_NOMBRE;
 
-                // Obtener el ID del usuario para guardarlo en sesión
                 var usuarioDetalle = ObtenerUsuarioPorNombre(XEUSU_NOMBRE);
-                if (usuarioDetalle.estado && usuarioDetalle.objeto != null)
+                if (usuarioDetalle.estado)
                 {
                     Session["UsuarioID"] = usuarioDetalle.objeto.XEUSU_ID;
+                    Session["Usuario"] = usuarioDetalle.objeto.XEUSU_NOMBRE;
+                    Session["UsuarioEstado"] = usuarioDetalle.objeto.XEUSU_ESTADO;
+                }
+                else
+                {
+                    
+                    Session["Usuario"] = XEUSU_NOMBRE;
                 }
 
-                return RedirectToAction("Index", "Home"); // Redirige al Home/Index
-            }
-            else
-            {
-                ViewBag.Error = respuesta.mensaje;
-                return View();
-            }
-        }
-
-        // GET: Login/Index (para el logout u otras funciones)
-        public ActionResult Index()
-        {
-            // Si ya está autenticado, redirigir al dashboard
-            if (User.Identity.IsAuthenticated)
-            {
                 return RedirectToAction("Index", "Home");
             }
-            // Si no está autenticado, mostrar el login
-            return RedirectToAction("Login");
+
+
+            ViewBag.Error = respuesta.mensaje;
+            return View();
         }
 
+
+
+       
+
         // GET: Login/Logout
-        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
-            Session.Clear();
+            Session.Abandon();
             return RedirectToAction("Login");
         }
+
 
         // Métodos auxiliares
         private Respuesta<int> LoginUsuario(string XEUSU_NOMBRE, string XEUSU_CONTRA)

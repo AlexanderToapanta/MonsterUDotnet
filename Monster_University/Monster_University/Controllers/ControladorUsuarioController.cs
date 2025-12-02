@@ -62,7 +62,6 @@ namespace Monster_University.Controllers
             return View("cambiarcontrasena");
         }
 
-        // POST: ControladorUsuario/CambiarContrasena
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CambiarContrasena(string claveActual, string nuevaClave, string confirmarClave)
@@ -87,6 +86,7 @@ namespace Monster_University.Controllers
                 return View();
             }
         }
+
 
         // GET: ControladorUsuario/Lista
         public ActionResult Lista()
