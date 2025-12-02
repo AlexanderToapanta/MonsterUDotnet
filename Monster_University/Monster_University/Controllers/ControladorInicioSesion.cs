@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using CapaModelo;
 using CapaDatos;
 using System.Web.Security;
 
@@ -14,7 +13,7 @@ namespace Monster_University.Controllers
             
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Views");
+                return RedirectToAction("Index");
             }
             return View();
         }

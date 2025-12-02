@@ -35,75 +35,86 @@
                 {
                     @Html.AntiForgeryToken()
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">
-                                    <i class="fas fa-id-card me-1"></i>ID Usuario:
-                                </label>
-                                <input type="text" name="UsuarioID" class="form-control"
-                                       placeholder="Ej: USR001"
-                                       required
-                                       maxlength="5">
-                                <small class="text-muted">Máximo 5 caracteres</small>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">
-                                    <i class="fas fa-user me-1"></i>Nombre de Usuario:
-                                </label>
-                                <input type="text" name="NombreUsuario" class="form-control"
-                                       placeholder="Nombre para iniciar sesión"
-                                       required>
-                            </div>
+                    <!-- SECCIÓN 1: Información Básica -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Información Básica
+                            </h5>
                         </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            <i class="fas fa-id-card me-1"></i>ID Usuario: *
+                                        </label>
+                                        <input type="text" name="UsuarioID" class="form-control"
+                                               placeholder="Ej: USR001"
+                                               required
+                                               maxlength="5">
+                                        <small class="text-muted">Máximo 5 caracteres</small>
+                                    </div>
 
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">
-                                    <i class="fas fa-lock me-1"></i>Contraseña:
-                                </label>
-                                <div class="input-group">
-                                    <input type="password" name="Contrasena" id="Contrasena"
-                                           class="form-control"
-                                           placeholder="Mínimo 6 caracteres"
-                                           required
-                                           minlength="6">
-                                    <button class="btn btn-outline-secondary" type="button" id="btnTogglePassword">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            <i class="fas fa-user me-1"></i>Nombre de Usuario: *
+                                        </label>
+                                        <input type="text" name="NombreUsuario" class="form-control"
+                                               placeholder="Nombre para iniciar sesión"
+                                               required>
+                                    </div>
                                 </div>
-                                <small class="text-muted">Mínimo 6 caracteres</small>
-                            </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">
-                                    <i class="fas fa-check-circle me-1"></i>Confirmar Contraseña:
-                                </label>
-                                <input type="password" name="ConfirmarContrasena" id="ConfirmarContrasena"
-                                       class="form-control"
-                                       placeholder="Repita la contraseña"
-                                       required>
-                                <div class="text-danger small" id="passwordError"></div>
-                            </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            <i class="fas fa-lock me-1"></i>Contraseña: *
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="password" name="Contrasena" id="Contrasena"
+                                                   class="form-control"
+                                                   placeholder="Mínimo 6 caracteres"
+                                                   required
+                                                   minlength="6">
+                                            <button class="btn btn-outline-secondary" type="button" id="btnTogglePassword">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        <small class="text-muted">Mínimo 6 caracteres</small>
+                                    </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">
-                                    <i class="fas fa-circle me-1"></i>Estado:
-                                </label>
-                                <select name="Estado" class="form-control">
-                                    <option value="ACTIVO">ACTIVO</option>
-                                    <option value="INACTIVO">INACTIVO</option>
-                                </select>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            <i class="fas fa-check-circle me-1"></i>Confirmar Contraseña: *
+                                        </label>
+                                        <input type="password" name="ConfirmarContrasena" id="ConfirmarContrasena"
+                                               class="form-control"
+                                               placeholder="Repita la contraseña"
+                                               required>
+                                        <div class="text-danger small" id="passwordError"></div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            <i class="fas fa-circle me-1"></i>Estado: *
+                                        </label>
+                                        <select name="Estado" class="form-control" required>
+                                            <option value="ACTIVO" selected>ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
+                  
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-success me-2" id="btnGuardar">
                             <i class="fas fa-save me-1"></i>Guardar Usuario
                         </button>
-                        @Html.ActionLink("Cancelar", "Index", "Home", null,
+                        @Html.ActionLink("Cancelar", "Lista", "ControladorUsuario", null,
                             new { @class = "btn btn-secondary", @style = "text-decoration: none;" })
                     </div>
                 }
@@ -150,6 +161,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                <i class="fas fa-link me-2"></i>Relaciones del Usuario
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionInfo">
+                            <div class="accordion-body">
+                                <p><strong>ID Persona:</strong> Vincula el usuario a un registro en la tabla PEPER_PERSON (empleados, profesores).</p>
+                                <p><strong>ID Carrera:</strong> Vincula el usuario a una carrera específica en MECARR_CARRERA.</p>
+                                <p><strong>ID Estudiante:</strong> Vincula el usuario a un estudiante específico en MEEST_ESTUD.</p>
+                                <p class="text-warning"><strong>Nota:</strong> Si especifica ID Estudiante, también debe especificar ID Carrera.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -159,9 +186,9 @@
 <!-- Scripts específicos para esta vista -->
 @section Scripts {
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Toggle password visibility
-            $('#btnTogglePassword').click(function() {
+            $('#btnTogglePassword').click(function () {
                 var passwordField = $('#Contrasena');
                 var type = passwordField.attr('type');
                 var icon = $(this).find('i');
@@ -176,7 +203,7 @@
             });
 
             // Validación de contraseñas coincidentes
-            $('#ConfirmarContrasena').on('keyup', function() {
+            $('#ConfirmarContrasena').on('keyup', function () {
                 var password = $('#Contrasena').val();
                 var confirmPassword = $(this).val();
 
@@ -189,8 +216,32 @@
                 }
             });
 
+            // Validación de relación estudiante-carrera
+            function validateStudentCareerRelation() {
+                var estudianteId = $('input[name="MEEST_ID"]').val().trim();
+                var carreraId = $('input[name="MECARR_ID"]').val().trim();
+
+                if (estudianteId && !carreraId) {
+                    $('input[name="MECARR_ID"]').addClass('is-invalid');
+                    return false;
+                } else {
+                    $('input[name="MECARR_ID"]').removeClass('is-invalid');
+                    return true;
+                }
+            }
+
+            // Validar cuando se escribe en ID Estudiante
+            $('input[name="MEEST_ID"]').on('keyup blur', function () {
+                validateStudentCareerRelation();
+            });
+
+            // Validar cuando se escribe en ID Carrera
+            $('input[name="MECARR_ID"]').on('keyup blur', function () {
+                validateStudentCareerRelation();
+            });
+
             // Validación del formulario
-            $('#formCrearUsuario').submit(function(e) {
+            $('#formCrearUsuario').submit(function (e) {
                 var usuarioID = $('input[name="UsuarioID"]').val().trim();
                 var nombreUsuario = $('input[name="NombreUsuario"]').val().trim();
                 var contrasena = $('#Contrasena').val();
@@ -226,14 +277,27 @@
                     isValid = false;
                 }
 
-                if (!isValid) {
-                    e.preventDefault();
+                // Validar relación estudiante-carrera
+                if (!validateStudentCareerRelation()) {
+                    isValid = false;
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Datos incompletos',
-                        text: 'Por favor complete todos los campos correctamente',
+                        title: 'Relación incompleta',
+                        text: 'Si especifica ID Estudiante, también debe especificar ID Carrera',
                         confirmButtonColor: '#667eea'
                     });
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                    if (isValid) { // Si solo hay error de estudiante-carrera, ya mostramos el mensaje
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Datos incompletos',
+                            text: 'Por favor complete todos los campos correctamente',
+                            confirmButtonColor: '#667eea'
+                        });
+                    }
                 } else {
                     // Mostrar indicador de carga
                     $('#btnGuardar').html('<i class="fas fa-spinner fa-spin me-1"></i>Guardando...');
@@ -242,18 +306,28 @@
             });
 
             // Auto-hide alerts after 5 seconds
-            setTimeout(function() {
+            setTimeout(function () {
                 $('.alert').alert('close');
             }, 5000);
 
             // Enfocar primer campo
             $('input[name="UsuarioID"]').focus();
+
+            // Validar relaciones al cargar la página
+            validateStudentCareerRelation();
         });
     </script>
 
     <style>
         /* Contenedor principal con imagen de fondo */
-       
+        .main-background {
+            background-image: url('/Content/Images/university-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
 
         /* Overlay más oscuro para mejor legibilidad */
         .background-overlay {
@@ -294,9 +368,9 @@
             border: none;
         }
 
-        .btn-success:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
-        }
+            .btn-success:hover {
+                background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
+            }
 
         /* Formulario */
         .form-control {
@@ -305,14 +379,14 @@
             transition: all 0.3s ease;
         }
 
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
+            .form-control:focus {
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            }
 
-        .form-control.is-invalid {
-            border-color: #dc3545;
-        }
+            .form-control.is-invalid {
+                border-color: #dc3545;
+            }
 
         /* Accordion */
         .accordion-button {
@@ -321,13 +395,18 @@
             color: #2c3e50;
         }
 
-        .accordion-button:not(.collapsed) {
-            color: #667eea;
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            .accordion-button:not(.collapsed) {
+                color: #667eea;
+                background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            }
+
+        /* Campos opcionales */
+        .bg-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
         }
 
-      
-
+        /* Responsive */
+        @@media (max-width: 768px) {
             .main-background {
                 background-attachment: scroll;
             }
@@ -336,7 +415,10 @@
                 width: 100%;
                 margin-bottom: 10px;
             }
+
+            .card-header h5 {
+                font-size: 1rem;
+            }
         }
     </style>
 }
-

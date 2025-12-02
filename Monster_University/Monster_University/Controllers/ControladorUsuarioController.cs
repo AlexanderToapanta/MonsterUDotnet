@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Security;
-using CapaModelo;
 
 namespace Monster_University.Controllers
 {
     public class ControladorUsuarioController : Controller
     {
-     
+        // GET: ControladorUsuario/Login
         public ActionResult Login()
         {
             return View();
         }
 
-   
+        // POST: ControladorUsuario/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(string XEUSU_NOMBRE, string XEUSU_CONTRA)
@@ -25,7 +24,15 @@ namespace Monster_University.Controllers
             {
                 FormsAuthentication.SetAuthCookie(XEUSU_NOMBRE, false);
                 Session["Usuario"] = XEUSU_NOMBRE;
-                return RedirectToAction("Index");
+
+                // Obtener el ID del usuario para guardarlo en sesión si es necesario
+                var usuarioDetalle = ObtenerUsuarioPorNombre(XEUSU_NOMBRE);
+                if (usuarioDetalle.estado && usuarioDetalle.objeto != null)
+                {
+                    Session["UsuarioID"] = usuarioDetalle.objeto.XEUSU_ID;
+                }
+
+                return RedirectToAction("Index"); // Cambia "Index" por tu acción principal
             }
             else
             {
@@ -33,14 +40,23 @@ namespace Monster_University.Controllers
                 return View();
             }
         }
-
-       
-        public ActionResult crearusuario()
+        public ActionResult Index()
         {
             return View();
         }
 
-       
+        // GET: ControladorUsuario/crearusuario
+        public ActionResult crearusuario()
+        {
+            // Inicializar el modelo con estado predeterminado
+            var model = new Usuario
+            {
+                XEUSU_ESTADO = "ACTIVO"
+            };
+            return View(model);
+        }
+
+        // POST: ControladorUsuario/crearusuario
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult crearusuario(FormCollection form)
@@ -48,32 +64,43 @@ namespace Monster_University.Controllers
             var nuevoUsuario = new Usuario
             {
                 XEUSU_ID = form["UsuarioID"],
+                PEPER_ID = form["PEPER_ID"],
+                MECARR_ID = form["MECARR_ID"],
+                MEEST_ID = form["MEEST_ID"],
                 XEUSU_NOMBRE = form["NombreUsuario"],
                 XEUSU_CONTRA = form["Contrasena"],
                 XEUSU_ESTADO = form["Estado"] ?? "ACTIVO"
             };
+
+            // Validar confirmación de contraseña si existe
+            string confirmarContrasena = form["ConfirmarContrasena"];
+            if (!string.IsNullOrEmpty(confirmarContrasena) && nuevoUsuario.XEUSU_CONTRA != confirmarContrasena)
+            {
+                ViewBag.Error = "Las contraseñas no coinciden";
+                return View(nuevoUsuario);
+            }
 
             var respuesta = GuardarUsuario(nuevoUsuario);
 
             if (respuesta.estado)
             {
                 TempData["SuccessMessage"] = respuesta.mensaje;
-                return RedirectToAction("Index");
+                return RedirectToAction("crearusuario");
             }
             else
             {
                 ViewBag.Error = respuesta.mensaje;
-                return View();
+                return View(nuevoUsuario);
             }
         }
 
-        
+        // GET: ControladorUsuario/CambiarContrasena
         public ActionResult CambiarContrasena()
         {
             return View("cambiarcontrasena");
         }
 
-        
+        // POST: ControladorUsuario/CambiarContrasena
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CambiarContrasena(string claveActual, string nuevaClave, string confirmarClave)
@@ -90,7 +117,7 @@ namespace Monster_University.Controllers
             if (respuesta.estado)
             {
                 TempData["SuccessMessage"] = respuesta.mensaje;
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -99,7 +126,7 @@ namespace Monster_University.Controllers
             }
         }
 
-  
+        // GET: ControladorUsuario/Lista
         public ActionResult Lista()
         {
             var respuesta = ObtenerUsuarios();
@@ -115,7 +142,7 @@ namespace Monster_University.Controllers
             }
         }
 
-        
+        // GET: ControladorUsuario/Editar/{id}
         public ActionResult Editar(string id)
         {
             var respuesta = ObtenerUsuarioPorId(id);
@@ -131,7 +158,7 @@ namespace Monster_University.Controllers
             }
         }
 
-       
+        // POST: ControladorUsuario/Editar
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Editar(FormCollection form)
@@ -139,6 +166,9 @@ namespace Monster_University.Controllers
             var usuarioEditado = new Usuario
             {
                 XEUSU_ID = form["XEUSU_ID"],
+                PEPER_ID = form["PEPER_ID"],
+                MECARR_ID = form["MECARR_ID"],
+                MEEST_ID = form["MEEST_ID"],
                 XEUSU_NOMBRE = form["XEUSU_NOMBRE"],
                 XEUSU_CONTRA = form["XEUSU_CONTRA"],
                 XEUSU_ESTADO = form["XEUSU_ESTADO"]
@@ -158,6 +188,7 @@ namespace Monster_University.Controllers
             return RedirectToAction("Lista");
         }
 
+        // GET: ControladorUsuario/Eliminar/{id}
         public ActionResult Eliminar(string id)
         {
             var respuesta = ObtenerUsuarioPorId(id);
@@ -173,7 +204,7 @@ namespace Monster_University.Controllers
             }
         }
 
-        
+        // POST: ControladorUsuario/Eliminar/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Eliminar")]
@@ -193,7 +224,7 @@ namespace Monster_University.Controllers
             return RedirectToAction("Lista");
         }
 
-        
+        // GET: ControladorUsuario/Detalles/{id}
         public ActionResult Detalles(string id)
         {
             var respuesta = ObtenerUsuarioPorId(id);
@@ -209,7 +240,7 @@ namespace Monster_University.Controllers
             }
         }
 
-      
+        // POST: ControladorUsuario/Logout
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Logout()
@@ -219,7 +250,16 @@ namespace Monster_University.Controllers
             return RedirectToAction("Login", "ControladorUsuario");
         }
 
-    
+        // GET: ControladorUsuario/Logout (para enlace directo)
+        public ActionResult CerrarSesion()
+        {
+            FormsAuthentication.SignOut();
+            Session.Clear();
+            return RedirectToAction("Login", "ControladorUsuario");
+        }
+
+        // Métodos auxiliares de negocio
+
         public Respuesta<List<Usuario>> ObtenerUsuarios()
         {
             Respuesta<List<Usuario>> response = new Respuesta<List<Usuario>>();
@@ -258,11 +298,33 @@ namespace Monster_University.Controllers
             return response;
         }
 
+        public Respuesta<Usuario> ObtenerUsuarioPorNombre(string XEUSU_NOMBRE)
+        {
+            Respuesta<Usuario> response = new Respuesta<Usuario>();
+            try
+            {
+                // Como no tenemos un método específico, obtenemos todos y filtramos
+                List<Usuario> lista = CapaDatos.CD_Usuario.Instancia.ObtenerUsuarios();
+                Usuario usuario = lista?.Find(u => u.XEUSU_NOMBRE == XEUSU_NOMBRE);
+
+                response.estado = usuario != null;
+                response.objeto = usuario;
+                response.mensaje = usuario != null ? "Usuario obtenido correctamente" : "Usuario no encontrado";
+            }
+            catch (Exception ex)
+            {
+                response.estado = false;
+                response.mensaje = "Error: " + ex.Message;
+            }
+            return response;
+        }
+
         public Respuesta<bool> GuardarUsuario(Usuario oUsuario)
         {
             Respuesta<bool> response = new Respuesta<bool>();
             try
             {
+                // Validaciones
                 if (string.IsNullOrEmpty(oUsuario.XEUSU_ID))
                 {
                     response.estado = false;
@@ -281,6 +343,22 @@ namespace Monster_University.Controllers
                 {
                     response.estado = false;
                     response.mensaje = "La contraseña es requerida";
+                    return response;
+                }
+
+                // Validar longitud mínima de contraseña
+                if (oUsuario.XEUSU_CONTRA.Length < 6)
+                {
+                    response.estado = false;
+                    response.mensaje = "La contraseña debe tener al menos 6 caracteres";
+                    return response;
+                }
+
+                // Validar que si se especifica MEEST_ID, también se especifique MECARR_ID
+                if (!string.IsNullOrEmpty(oUsuario.MEEST_ID) && string.IsNullOrEmpty(oUsuario.MECARR_ID))
+                {
+                    response.estado = false;
+                    response.mensaje = "Si especifica Estudiante ID, debe especificar Carrera ID";
                     return response;
                 }
 
@@ -315,6 +393,21 @@ namespace Monster_University.Controllers
                     return response;
                 }
 
+                if (string.IsNullOrEmpty(oUsuario.XEUSU_NOMBRE))
+                {
+                    response.estado = false;
+                    response.mensaje = "El nombre de usuario es requerido";
+                    return response;
+                }
+
+                // Validar que si se especifica MEEST_ID, también se especifique MECARR_ID
+                if (!string.IsNullOrEmpty(oUsuario.MEEST_ID) && string.IsNullOrEmpty(oUsuario.MECARR_ID))
+                {
+                    response.estado = false;
+                    response.mensaje = "Si especifica Estudiante ID, debe especificar Carrera ID";
+                    return response;
+                }
+
                 bool resultado = CapaDatos.CD_Usuario.Instancia.ModificarUsuario(oUsuario);
 
                 response.estado = resultado;
@@ -338,6 +431,15 @@ namespace Monster_University.Controllers
                 {
                     response.estado = false;
                     response.mensaje = "El ID del usuario es requerido";
+                    return response;
+                }
+
+                // Prevenir eliminación del usuario actualmente logueado
+                string usuarioActualId = Session["UsuarioID"]?.ToString();
+                if (usuarioActualId == XEUSU_ID)
+                {
+                    response.estado = false;
+                    response.mensaje = "No puede eliminar su propio usuario mientras está logueado";
                     return response;
                 }
 
@@ -400,6 +502,13 @@ namespace Monster_University.Controllers
                     return response;
                 }
 
+                if (string.IsNullOrEmpty(XEUSU_CONTRA))
+                {
+                    response.estado = false;
+                    response.mensaje = "La contraseña actual es requerida";
+                    return response;
+                }
+
                 if (string.IsNullOrEmpty(nuevaClave))
                 {
                     response.estado = false;
@@ -407,11 +516,19 @@ namespace Monster_University.Controllers
                     return response;
                 }
 
+                // Validar longitud mínima de nueva contraseña
+                if (nuevaClave.Length < 6)
+                {
+                    response.estado = false;
+                    response.mensaje = "La nueva contraseña debe tener al menos 6 caracteres";
+                    return response;
+                }
+
                 int resultado = CapaDatos.CD_Usuario.Instancia.CambiarClave(XEUSU_NOMBRE, XEUSU_CONTRA, nuevaClave);
 
                 response.estado = resultado > 0;
                 response.objeto = resultado;
-                response.mensaje = resultado > 0 ? "Contraseña cambiada correctamente" : "No se pudo cambiar la contraseña";
+                response.mensaje = resultado > 0 ? "Contraseña cambiada correctamente" : "No se pudo cambiar la contraseña. Verifique su contraseña actual.";
             }
             catch (Exception ex)
             {
@@ -422,6 +539,7 @@ namespace Monster_University.Controllers
         }
     }
 
+    // Clase auxiliar para manejar respuestas
     public class Respuesta<T>
     {
         public bool estado { get; set; }
