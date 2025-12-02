@@ -30,7 +30,7 @@
 </head>
 <body>
     <!-- CAMBIO AQUÍ: "ControladorUsuario" en lugar de "Views" -->
-    @using (Html.BeginForm("Login", "ControladorUsuario", FormMethod.Post, new { id = "loginForm" }))
+    @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { id = "loginForm" }))
     {
         @Html.AntiForgeryToken()
 
@@ -303,8 +303,6 @@
             text-align: center;
             border-top: 1px solid #e2e8f0;
         }
-
-        
     </style>
 </body>
 </html>

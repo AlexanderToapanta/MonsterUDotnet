@@ -7,45 +7,7 @@ namespace Monster_University.Controllers
 {
     public class ControladorUsuarioController : Controller
     {
-        // GET: ControladorUsuario/Login
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        // POST: ControladorUsuario/Login
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Login(string XEUSU_NOMBRE, string XEUSU_CONTRA)
-        {
-            var respuesta = LoginUsuario(XEUSU_NOMBRE, XEUSU_CONTRA);
-
-            if (respuesta.estado)
-            {
-                FormsAuthentication.SetAuthCookie(XEUSU_NOMBRE, false);
-                Session["Usuario"] = XEUSU_NOMBRE;
-
-                // Obtener el ID del usuario para guardarlo en sesión si es necesario
-                var usuarioDetalle = ObtenerUsuarioPorNombre(XEUSU_NOMBRE);
-                if (usuarioDetalle.estado && usuarioDetalle.objeto != null)
-                {
-                    Session["UsuarioID"] = usuarioDetalle.objeto.XEUSU_ID;
-                }
-
-                return RedirectToAction("Index"); // Cambia "Index" por tu acción principal
-            }
-            else
-            {
-                ViewBag.Error = respuesta.mensaje;
-                return View();
-            }
-        }
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        // GET: ControladorUsuario/crearusuario
+       
         public ActionResult crearusuario()
         {
             // Inicializar el modelo con estado predeterminado
@@ -240,24 +202,8 @@ namespace Monster_University.Controllers
             }
         }
 
-        // POST: ControladorUsuario/Logout
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Logout()
-        {
-            FormsAuthentication.SignOut();
-            Session.Clear();
-            return RedirectToAction("Login", "ControladorUsuario");
-        }
 
-        // GET: ControladorUsuario/Logout (para enlace directo)
-        public ActionResult CerrarSesion()
-        {
-            FormsAuthentication.SignOut();
-            Session.Clear();
-            return RedirectToAction("Login", "ControladorUsuario");
-        }
-
+       
         // Métodos auxiliares de negocio
 
         public Respuesta<List<Usuario>> ObtenerUsuarios()
@@ -457,38 +403,7 @@ namespace Monster_University.Controllers
             return response;
         }
 
-        public Respuesta<int> LoginUsuario(string XEUSU_NOMBRE, string XEUSU_CONTRA)
-        {
-            Respuesta<int> response = new Respuesta<int>();
-            try
-            {
-                if (string.IsNullOrEmpty(XEUSU_NOMBRE))
-                {
-                    response.estado = false;
-                    response.mensaje = "El nombre de usuario es requerido";
-                    return response;
-                }
-
-                if (string.IsNullOrEmpty(XEUSU_CONTRA))
-                {
-                    response.estado = false;
-                    response.mensaje = "La contraseña es requerida";
-                    return response;
-                }
-
-                int resultado = CapaDatos.CD_Usuario.Instancia.LoginUsuario(XEUSU_NOMBRE, XEUSU_CONTRA);
-
-                response.estado = resultado > 0;
-                response.objeto = resultado;
-                response.mensaje = resultado > 0 ? "Login exitoso" : "Usuario o contraseña incorrectos";
-            }
-            catch (Exception ex)
-            {
-                response.estado = false;
-                response.mensaje = "Error: " + ex.Message;
-            }
-            return response;
-        }
+       
 
         public Respuesta<int> CambiarClaveUsuario(string XEUSU_NOMBRE, string XEUSU_CONTRA, string nuevaClave)
         {
