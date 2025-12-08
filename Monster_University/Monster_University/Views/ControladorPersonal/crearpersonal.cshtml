@@ -1,0 +1,585 @@
+﻿@model CapaModelo.Personal
+
+@{
+    ViewBag.Title = "Crear Personal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Contenedor principal con imagen de fondo y overlay -->
+<div class="main-background">
+    <div class="background-overlay"></div>
+    <div class="dashboard-container">
+        <!-- Tarjeta de Crear Personal -->
+        <div class="card" style="margin-bottom: 20px; background: rgba(255,255,255,0.95);">
+            <div class="card-header" style="background: linear-gradient(135deg, #2a64c5 0%, #4a90e2 100%); color: white; border-radius: 10px 10px 0 0;">
+                <h3 class="mb-0">
+                    <i class="fas fa-user-plus me-2"></i>Crear Nueva Persona
+                </h3>
+                <p class="mb-0 mt-1" style="opacity: 0.9; font-size: 0.9rem;">
+                    Complete los datos para registrar una nueva persona en el sistema
+                </p>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(ViewBag.Error))
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>@ViewBag.Error
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (TempData["WarningMessage"] != null)
+                {
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>@TempData["WarningMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @using (Html.BeginForm("crearpersonal", "ControladorPersonal", FormMethod.Post, new { id = "formCrearPersona", @class = "needs-validation", @novalidate = "novalidate" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <!-- SECCIÓN 1: Información Básica -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-id-card me-2"></i>Datos Personales
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- ID Persona (Generado automáticamente) -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-key me-1"></i>ID Persona: <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="text" name="PEPER_ID" id="PEPER_ID"
+                                                   class="form-control bg-light"
+                                                   value="@ViewBag.IdGenerado"
+                                                   readonly
+                                                   placeholder="Se genera automáticamente">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-key"></i>
+                                            </span>
+                                        </div>
+                                        <small class="text-muted">(Generado automáticamente)</small>
+                                    </div>
+                                </div>
+
+                                <!-- Tipo de Persona -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-user-tag me-1"></i>Tipo de Persona: <span class="text-danger">*</span>
+                                        </label>
+                                        <select name="PEPER_TIPO" class="form-control" required>
+                                            <option value="">Seleccione tipo</option>
+                                            <option value="Administrador del Sistema">Administrador del Sistema</option>
+                                            <option value="Docente">Docente</option>
+                                            <option value="Administrador de matriculas">Administrador de matrículas</option>
+                                            <option value="Secretaria Academica">Secretaría Académica</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nombre y Apellido -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-user me-1"></i>Nombre: <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="PEPER_NOMBRE"
+                                               class="form-control"
+                                               placeholder="Ingrese el nombre"
+                                               maxlength="25"
+                                               required>
+                                        <small class="text-muted">(Máximo 25 caracteres)</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-user me-1"></i>Apellido: <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="PEPER_APELLIDO"
+                                               class="form-control"
+                                               placeholder="Ingrese el apellido"
+                                               maxlength="25"
+                                               required>
+                                        <small class="text-muted">(Máximo 25 caracteres)</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cédula y Celular -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-address-card me-1"></i>Cédula: <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="PEPER_CEDULA"
+                                               class="form-control"
+                                               placeholder="Ej: 1234567890"
+                                               maxlength="15"
+                                               required>
+                                        <small class="text-muted">(Máximo 15 caracteres)</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-phone me-1"></i>Celular:
+                                        </label>
+                                        <input type="text" name="PEPER_CELULAR"
+                                               class="form-control"
+                                               placeholder="Ej: 0991234567 (opcional)"
+                                               maxlength="15">
+                                        <small class="text-muted">(Máximo 15 caracteres, opcional)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN 2: Información de Contacto -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-envelope me-2"></i>Información de Contacto
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-at me-1"></i>Email: <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="email" name="PEPER_EMAIL"
+                                               class="form-control"
+                                               placeholder="ejemplo@correo.com"
+                                               maxlength="30"
+                                               required>
+                                        <small class="text-muted">(Máximo 30 caracteres)</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-calendar-alt me-1"></i>Fecha de Ingreso: <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" name="PEPEPER_FECH_INGR"
+                                               class="form-control"
+                                               required>
+                                        <small class="text-muted">(Fecha en que ingresó a la institución)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN 3: Información Personal -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0">
+                                <i class="fas fa-user-circle me-2"></i>Información Personal
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Sexo -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-venus-mars me-1"></i>Sexo: <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="radio-group mt-2">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="PESEX_ID" id="sexoM" value="M" required>
+                                                <label class="form-check-label" for="sexoM">Masculino</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="PESEX_ID" id="sexoF" value="F" required>
+                                                <label class="form-check-label" for="sexoF">Femenino</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="PESEX_ID" id="sexoO" value="O" required>
+                                                <label class="form-check-label" for="sexoO">Otro</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Estado Civil (opcional) -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-heart me-1"></i>Estado Civil:
+                                        </label>
+                                        <select name="PEESC_ID" class="form-control">
+                                            <option value="">Seleccione estado civil (opcional)</option>
+                                            <option value="S">Soltero/a</option>
+                                            <option value="C">Casado/a</option>
+                                            <option value="V">Viudo/a</option>
+                                            <option value="D">Divorciado/a</option>
+                                            <option value="U">Unión Libre</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-success me-2" id="btnGuardar">
+                            <i class="fas fa-save me-1"></i>Crear Persona
+                        </button>
+                        <button type="button" class="btn btn-secondary me-2" id="btnLimpiar">
+                            <i class="fas fa-redo me-1"></i>Limpiar
+                        </button>
+                        @Html.ActionLink("Cancelar", "listapersonal", "ControladorPersonal", null,
+                            new { @class = "btn btn-outline-secondary", @style = "text-decoration: none;" })
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Información de Ayuda -->
+        <div class="card" style="background: rgba(255,255,255,0.95);">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Información Importante
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="accordionInfo">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                <i class="fas fa-id-card me-2"></i>Generación de Usuario Automático
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionInfo">
+                            <div class="accordion-body">
+                                <ul>
+                                    <li>Al crear una persona, se generará automáticamente un usuario en el sistema</li>
+                                    <li>El ID del usuario seguirá el formato: US001, US002, etc.</li>
+                                    <li>El nombre de usuario será: Primera letra del nombre + Apellido completo</li>
+                                    <li>La contraseña inicial será la <strong>cédula</strong> de la persona</li>
+                                    <li>El estado del usuario será <strong>ACTIVO</strong> por defecto</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                <i class="fas fa-star me-2"></i>Campos Obligatorios
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionInfo">
+                            <div class="accordion-body">
+                                <p><strong>Los campos marcados con * son obligatorios:</strong></p>
+                                <ul>
+                                    <li><strong>ID Persona:</strong> Generado automáticamente</li>
+                                    <li><strong>Tipo de Persona:</strong> Seleccione el rol en la institución</li>
+                                    <li><strong>Nombre y Apellido:</strong> Máximo 25 caracteres cada uno</li>
+                                    <li><strong>Cédula:</strong> Máximo 15 caracteres</li>
+                                    <li><strong>Email:</strong> Formato válido de correo electrónico</li>
+                                    <li><strong>Fecha de Ingreso:</strong> Fecha en que ingresó a la institución</li>
+                                    <li><strong>Sexo:</strong> Seleccione una opción</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                <i class="fas fa-user-check me-2"></i>Datos Generados Automáticamente
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionInfo">
+                            <div class="accordion-body">
+                                <p>Después de crear la persona, se generará:</p>
+                                <ul>
+                                    <li><strong>ID de Persona:</strong> PE001, PE002, etc.</li>
+                                    <li><strong>ID de Usuario:</strong> US001, US002, etc.</li>
+                                    <li><strong>Nombre de Usuario:</strong> Ej: JSmith (primera letra del nombre + apellido)</li>
+                                    <li><strong>Contraseña:</strong> La cédula de la persona</li>
+                                    <li><strong>Estado del Usuario:</strong> ACTIVO</li>
+                                </ul>
+                                <p class="text-warning mt-2">
+                                    <strong>Nota:</strong> La persona podrá iniciar sesión con su nombre de usuario y contraseña (cédula)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts específicos para esta vista -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            console.log("=== FORMULARIO CREAR PERSONA CARGADO ===");
+
+            // Botón limpiar formulario
+            $('#btnLimpiar').click(function () {
+                if (confirm('¿Está seguro de que desea limpiar el formulario?')) {
+                    location.reload();
+                }
+            });
+
+            // Validación del formulario
+            $('#formCrearPersona').submit(function (e) {
+                console.log('=== INICIANDO CREACIÓN DE PERSONA ===');
+
+                var isValid = true;
+
+                // Reset errores
+                $('.form-control').removeClass('is-invalid');
+                $('.invalid-feedback').remove();
+
+                // Validar tipo de persona
+                if (!$('select[name="PEPER_TIPO"]').val()) {
+                    $('select[name="PEPER_TIPO"]').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                // Validar nombre
+                if (!$('input[name="PEPER_NOMBRE"]').val().trim()) {
+                    $('input[name="PEPER_NOMBRE"]').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                // Validar apellido
+                if (!$('input[name="PEPER_APELLIDO"]').val().trim()) {
+                    $('input[name="PEPER_APELLIDO"]').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                // Validar cédula
+                var cedula = $('input[name="PEPER_CEDULA"]').val().trim();
+                if (!cedula) {
+                    $('input[name="PEPER_CEDULA"]').addClass('is-invalid');
+                    isValid = false;
+                } else if (cedula.length < 6) {
+                    $('input[name="PEPER_CEDULA"]').addClass('is-invalid');
+                    isValid = false;
+                    console.log('Error: La cédula debe tener al menos 6 caracteres');
+                }
+
+                // Validar email
+                var email = $('input[name="PEPER_EMAIL"]').val().trim();
+                if (!email) {
+                    $('input[name="PEPER_EMAIL"]').addClass('is-invalid');
+                    isValid = false;
+                } else if (!isValidEmail(email)) {
+                    $('input[name="PEPER_EMAIL"]').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                // Validar fecha
+                if (!$('input[name="PEPEPER_FECH_INGR"]').val()) {
+                    $('input[name="PEPEPER_FECH_INGR"]').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                // Validar sexo
+                if (!$('input[name="PESEX_ID"]:checked').length) {
+                    $('input[name="PESEX_ID"]').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Datos incompletos',
+                        text: 'Por favor complete todos los campos obligatorios correctamente',
+                        confirmButtonColor: '#2a64c5'
+                    });
+                } else {
+                    // Mostrar indicador de carga
+                    $('#btnGuardar').html('<i class="fas fa-spinner fa-spin me-1"></i>Creando...');
+                    $('#btnGuardar').prop('disabled', true);
+                    console.log('✅ Formulario válido, enviando...');
+                }
+            });
+
+           
+            // Auto-hide alerts after 5 seconds
+            setTimeout(function () {
+                $('.alert').alert('close');
+            }, 5000);
+
+            // Enfocar primer campo editable
+            $('input[name="PEPER_NOMBRE"]').focus();
+
+            // Debug: Mostrar valores al cambiar campos
+            $('input, select').on('change', function() {
+                console.log('Campo cambiado:', $(this).attr('name'), '=', $(this).val());
+            });
+        });
+    </script>
+
+    <style>
+        /* Contenedor principal con imagen de fondo */
+        .main-background {
+            background-image: url('/Content/Images/university-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Overlay más oscuro para mejor legibilidad */
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        /* Contenedor del dashboard */
+        .dashboard-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Estilos para las tarjetas */
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            border: none;
+            font-weight: 600;
+        }
+
+        /* Botones */
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+        }
+
+            .btn-success:hover {
+                background: linear-gradient(135deg, #218838 0%, #1e9e8a 100%);
+            }
+
+        /* Formulario */
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+        }
+
+            .form-control:focus {
+                border-color: #2a64c5;
+                box-shadow: 0 0 0 3px rgba(42, 100, 197, 0.2);
+            }
+
+            .form-control.is-invalid {
+                border-color: #dc3545;
+            }
+
+            .form-control.bg-light {
+                background-color: #f8f9fa !important;
+            }
+
+        /* Radio buttons */
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 5px;
+        }
+
+        .form-check-input {
+            margin-top: 0.2rem;
+        }
+
+        .form-check-label {
+            margin-left: 0.3rem;
+        }
+
+        /* Input groups */
+        .input-group-text {
+            background-color: #f8f9fa;
+            border: 2px solid #e2e8f0;
+        }
+
+        /* Accordion */
+        .accordion-button {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+            .accordion-button:not(.collapsed) {
+                color: #2a64c5;
+                background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            }
+
+        /* Labels con íconos */
+        .form-label i {
+            color: #2a64c5;
+            width: 20px;
+        }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .main-background {
+                background-attachment: scroll;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .card-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+}

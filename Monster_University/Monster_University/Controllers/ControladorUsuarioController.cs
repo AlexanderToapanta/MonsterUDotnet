@@ -1,5 +1,8 @@
-﻿using System;
+﻿using CapaDatos;
+using CapaModelo;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -7,14 +10,20 @@ namespace Monster_University.Controllers
 {
     public class ControladorUsuarioController : Controller
     {
-       
+        // GET: ControladorUsuario/crearusuario
         public ActionResult crearusuario()
         {
-            // Inicializar el modelo con estado predeterminado
+            // Inicializar el modelo
             var model = new Usuario
             {
                 XEUSU_ESTADO = "ACTIVO"
             };
+
+            // Generar ID automáticamente
+            var nuevoId = GenerarIdUsuarioAutomatico();
+            ViewBag.IdGenerado = nuevoId;
+            model.XEUSU_ID = nuevoId;
+
             return View(model);
         }
 
@@ -23,70 +32,130 @@ namespace Monster_University.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult crearusuario(FormCollection form)
         {
-            var nuevoUsuario = new Usuario
+            try
             {
-                XEUSU_ID = form["UsuarioID"],
-                PEPER_ID = form["PEPER_ID"],
-                MECARR_ID = form["MECARR_ID"],
-                MEEST_ID = form["MEEST_ID"],
-                XEUSU_NOMBRE = form["NombreUsuario"],
-                XEUSU_CONTRA = form["Contrasena"],
-                XEUSU_ESTADO = form["Estado"] ?? "ACTIVO"
-            };
+                var nuevoUsuario = new Usuario
+                {
+                    XEUSU_ID = form["XEUSU_ID"],
+                    PEPER_ID = string.IsNullOrEmpty(form["PEPER_ID"]) ? null : form["PEPER_ID"],
+                    MECARR_ID = string.IsNullOrEmpty(form["MECARR_ID"]) ? null : form["MECARR_ID"],
+                    MEEST_ID = string.IsNullOrEmpty(form["MEEST_ID"]) ? null : form["MEEST_ID"],
+                    XEUSU_NOMBRE = form["XEUSU_NOMBRE"],
+                    XEUSU_CONTRA = form["XEUSU_CONTRA"],
+                    XEUSU_ESTADO = form["XEUSU_ESTADO"] ?? "ACTIVO"
+                };
 
-            // Validar confirmación de contraseña si existe
-            string confirmarContrasena = form["ConfirmarContrasena"];
-            if (!string.IsNullOrEmpty(confirmarContrasena) && nuevoUsuario.XEUSU_CONTRA != confirmarContrasena)
-            {
-                ViewBag.Error = "Las contraseñas no coinciden";
-                return View(nuevoUsuario);
+                // Si se especificó una persona, validar que no tenga usuario asignado
+                if (!string.IsNullOrEmpty(nuevoUsuario.PEPER_ID))
+                {
+                    var personaConUsuario = CD_Personal.Instancia.ObtenerDetallePersonal(nuevoUsuario.PEPER_ID);
+                    if (personaConUsuario != null && !string.IsNullOrEmpty(personaConUsuario.XEUSU_ID))
+                    {
+                        ViewBag.Error = "Esta persona ya tiene un usuario asignado.";
+                        // Regenerar ID para nuevo intento
+                        ViewBag.IdGenerado = GenerarIdUsuarioAutomatico();
+                        return View(nuevoUsuario);
+                    }
+                }
+
+                var respuesta = GuardarUsuario(nuevoUsuario);
+
+                if (respuesta.estado)
+                {
+                    // Si se creó usuario para una persona, actualizar la persona
+                    if (!string.IsNullOrEmpty(nuevoUsuario.PEPER_ID))
+                    {
+                        var persona = CD_Personal.Instancia.ObtenerDetallePersonal(nuevoUsuario.PEPER_ID);
+                        if (persona != null)
+                        {
+                            persona.XEUSU_ID = nuevoUsuario.XEUSU_ID;
+                            CD_Personal.Instancia.ModificarPersonal(persona);
+                        }
+                    }
+
+                    TempData["SuccessMessage"] = respuesta.mensaje;
+                    return RedirectToAction("crearusuario");
+                }
+                else
+                {
+                    ViewBag.Error = respuesta.mensaje;
+                    ViewBag.IdGenerado = GenerarIdUsuarioAutomatico();
+                    return View(nuevoUsuario);
+                }
             }
-
-            var respuesta = GuardarUsuario(nuevoUsuario);
-
-            if (respuesta.estado)
+            catch (Exception ex)
             {
-                TempData["SuccessMessage"] = respuesta.mensaje;
-                return RedirectToAction("crearusuario");
-            }
-            else
-            {
-                ViewBag.Error = respuesta.mensaje;
-                return View(nuevoUsuario);
+                ViewBag.Error = $"Error: {ex.Message}";
+                ViewBag.IdGenerado = GenerarIdUsuarioAutomatico();
+                return View(new Usuario { XEUSU_ESTADO = "ACTIVO" });
             }
         }
 
-        // GET: ControladorUsuario/CambiarContrasena
-        public ActionResult CambiarContrasena()
+        // GET: ControladorUsuario/listapersonas (para buscar personas)
+        [HttpGet]
+        public JsonResult BuscarPersonas(string term)
         {
-            return View("cambiarcontrasena");
+            try
+            {
+                var personas = CD_Personal.Instancia.ObtenerPersonales();
+                if (personas == null) return Json(new List<object>(), JsonRequestBehavior.AllowGet);
+
+                var resultados = new List<object>();
+                foreach (var persona in personas)
+                {
+                    // Solo mostrar personas que no tengan usuario asignado
+                    if (string.IsNullOrEmpty(persona.XEUSU_ID))
+                    {
+                        resultados.Add(new
+                        {
+                            id = persona.PEPER_ID,
+                            text = $"{persona.PEPER_ID} - {persona.PEPER_NOMBRE} {persona.PEPER_APELLIDO}",
+                            nombre = persona.PEPER_NOMBRE,
+                            apellido = persona.PEPER_APELLIDO,
+                            cedula = persona.PEPER_CEDULA
+                        });
+                    }
+                }
+                return Json(resultados, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new List<object>(), JsonRequestBehavior.AllowGet);
+            }
         }
 
+        // POST: ControladorUsuario/generardatosusuario
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CambiarContrasena(string claveActual, string nuevaClave, string confirmarClave)
+        public JsonResult GenerarDatosUsuario(string personaId)
         {
-            if (nuevaClave != confirmarClave)
+            try
             {
-                ViewBag.Error = "Las contraseñas no coinciden";
-                return View();
-            }
+                if (string.IsNullOrEmpty(personaId))
+                    return Json(new { success = false, message = "ID de persona requerido" });
 
-            string usuarioActual = Session["Usuario"]?.ToString() ?? User.Identity.Name;
-            var respuesta = CambiarClaveUsuario(usuarioActual, claveActual, nuevaClave);
+                var persona = CD_Personal.Instancia.ObtenerDetallePersonal(personaId);
+                if (persona == null)
+                    return Json(new { success = false, message = "Persona no encontrada" });
 
-            if (respuesta.estado)
-            {
-                TempData["SuccessMessage"] = respuesta.mensaje;
-                return RedirectToAction("Index", "Home");
+                // Verificar si ya tiene usuario
+                if (!string.IsNullOrEmpty(persona.XEUSU_ID))
+                    return Json(new { success = false, message = "Esta persona ya tiene un usuario asignado" });
+
+                // Generar datos automáticos
+                var datosUsuario = new
+                {
+                    success = true,
+                    nombreUsuario = GenerarNombreUsuario(persona),
+                    contrasena = persona.PEPER_CEDULA
+                };
+
+                return Json(datosUsuario);
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.Error = respuesta.mensaje;
-                return View();
+                return Json(new { success = false, message = ex.Message });
             }
         }
-
 
         // GET: ControladorUsuario/Lista
         public ActionResult Lista()
@@ -125,29 +194,37 @@ namespace Monster_University.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Editar(FormCollection form)
         {
-            var usuarioEditado = new Usuario
+            try
             {
-                XEUSU_ID = form["XEUSU_ID"],
-                PEPER_ID = form["PEPER_ID"],
-                MECARR_ID = form["MECARR_ID"],
-                MEEST_ID = form["MEEST_ID"],
-                XEUSU_NOMBRE = form["XEUSU_NOMBRE"],
-                XEUSU_CONTRA = form["XEUSU_CONTRA"],
-                XEUSU_ESTADO = form["XEUSU_ESTADO"]
-            };
+                var usuarioEditado = new Usuario
+                {
+                    XEUSU_ID = form["XEUSU_ID"],
+                    PEPER_ID = string.IsNullOrEmpty(form["PEPER_ID"]) ? null : form["PEPER_ID"],
+                    MECARR_ID = string.IsNullOrEmpty(form["MECARR_ID"]) ? null : form["MECARR_ID"],
+                    MEEST_ID = string.IsNullOrEmpty(form["MEEST_ID"]) ? null : form["MEEST_ID"],
+                    XEUSU_NOMBRE = form["XEUSU_NOMBRE"],
+                    XEUSU_CONTRA = form["XEUSU_CONTRA"],
+                    XEUSU_ESTADO = form["XEUSU_ESTADO"]
+                };
 
-            var respuesta = EditarUsuario(usuarioEditado);
+                var respuesta = EditarUsuario(usuarioEditado);
 
-            if (respuesta.estado)
-            {
-                TempData["SuccessMessage"] = respuesta.mensaje;
+                if (respuesta.estado)
+                {
+                    TempData["SuccessMessage"] = respuesta.mensaje;
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = respuesta.mensaje;
+                }
+
+                return RedirectToAction("Lista");
             }
-            else
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = respuesta.mensaje;
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                return RedirectToAction("Lista");
             }
-
-            return RedirectToAction("Lista");
         }
 
         // GET: ControladorUsuario/Eliminar/{id}
@@ -202,16 +279,87 @@ namespace Monster_University.Controllers
             }
         }
 
-
-       
         // Métodos auxiliares de negocio
+
+        private string GenerarIdUsuarioAutomatico()
+        {
+            try
+            {
+                // Obtener lista de usuarios existentes
+                var listaUsuarios = CD_Usuario.Instancia.ObtenerUsuarios();
+                if (listaUsuarios == null || listaUsuarios.Count == 0)
+                {
+                    return "US001";
+                }
+
+                // Buscar máximo número en IDs USXXX
+                int maxNumero = 0;
+                foreach (var usuario in listaUsuarios)
+                {
+                    if (usuario.XEUSU_ID != null &&
+                        usuario.XEUSU_ID.StartsWith("US") &&
+                        usuario.XEUSU_ID.Length == 5)
+                    {
+                        try
+                        {
+                            string numeroStr = usuario.XEUSU_ID.Substring(2);
+                            if (int.TryParse(numeroStr, out int numero))
+                            {
+                                if (numero > maxNumero)
+                                {
+                                    maxNumero = numero;
+                                }
+                            }
+                        }
+                        catch { }
+                    }
+                }
+
+                // Buscar huecos disponibles
+                for (int i = 1; i <= 999; i++)
+                {
+                    string idCandidato = $"US{i:000}";
+                    bool existe = listaUsuarios.Any(u => u.XEUSU_ID == idCandidato);
+                    if (!existe)
+                    {
+                        return idCandidato;
+                    }
+                }
+
+                // Si no hay huecos, usar siguiente número
+                return $"US{maxNumero + 1:000}";
+            }
+            catch (Exception)
+            {
+                return "US001";
+            }
+        }
+
+        private string GenerarNombreUsuario(Personal persona)
+        {
+            if (string.IsNullOrEmpty(persona.PEPER_NOMBRE) || string.IsNullOrEmpty(persona.PEPER_APELLIDO))
+            {
+                return "usuario_" + persona.PEPER_CEDULA;
+            }
+
+            string primeraLetra = persona.PEPER_NOMBRE.Substring(0, 1).ToUpper();
+            string nombreUsuario = primeraLetra + persona.PEPER_APELLIDO;
+
+            // Limitar longitud si es necesario
+            if (nombreUsuario.Length > 100)
+            {
+                nombreUsuario = nombreUsuario.Substring(0, 100);
+            }
+
+            return nombreUsuario;
+        }
 
         public Respuesta<List<Usuario>> ObtenerUsuarios()
         {
             Respuesta<List<Usuario>> response = new Respuesta<List<Usuario>>();
             try
             {
-                List<Usuario> lista = CapaDatos.CD_Usuario.Instancia.ObtenerUsuarios();
+                List<Usuario> lista = CD_Usuario.Instancia.ObtenerUsuarios();
 
                 response.estado = lista != null;
                 response.objeto = lista;
@@ -230,7 +378,7 @@ namespace Monster_University.Controllers
             Respuesta<Usuario> response = new Respuesta<Usuario>();
             try
             {
-                Usuario usuario = CapaDatos.CD_Usuario.Instancia.ObtenerDetalleUsuario(XEUSU_ID);
+                Usuario usuario = CD_Usuario.Instancia.ObtenerDetalleUsuario(XEUSU_ID);
 
                 response.estado = usuario != null;
                 response.objeto = usuario;
@@ -249,8 +397,7 @@ namespace Monster_University.Controllers
             Respuesta<Usuario> response = new Respuesta<Usuario>();
             try
             {
-                // Como no tenemos un método específico, obtenemos todos y filtramos
-                List<Usuario> lista = CapaDatos.CD_Usuario.Instancia.ObtenerUsuarios();
+                List<Usuario> lista = CD_Usuario.Instancia.ObtenerUsuarios();
                 Usuario usuario = lista?.Find(u => u.XEUSU_NOMBRE == XEUSU_NOMBRE);
 
                 response.estado = usuario != null;
@@ -313,7 +460,7 @@ namespace Monster_University.Controllers
                     oUsuario.XEUSU_ESTADO = "ACTIVO";
                 }
 
-                bool resultado = CapaDatos.CD_Usuario.Instancia.RegistrarUsuario(oUsuario);
+                bool resultado = CD_Usuario.Instancia.RegistrarUsuario(oUsuario);
 
                 response.estado = resultado;
                 response.objeto = resultado;
@@ -354,7 +501,7 @@ namespace Monster_University.Controllers
                     return response;
                 }
 
-                bool resultado = CapaDatos.CD_Usuario.Instancia.ModificarUsuario(oUsuario);
+                bool resultado = CD_Usuario.Instancia.ModificarUsuario(oUsuario);
 
                 response.estado = resultado;
                 response.objeto = resultado;
@@ -389,7 +536,7 @@ namespace Monster_University.Controllers
                     return response;
                 }
 
-                bool resultado = CapaDatos.CD_Usuario.Instancia.EliminarUsuario(XEUSU_ID);
+                bool resultado = CD_Usuario.Instancia.EliminarUsuario(XEUSU_ID);
 
                 response.estado = resultado;
                 response.objeto = resultado;
@@ -402,9 +549,35 @@ namespace Monster_University.Controllers
             }
             return response;
         }
+        public ActionResult CambiarContrasena()
+        {
+            return View("cambiarcontrasena");
+        }
 
-       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CambiarContrasena(string claveActual, string nuevaClave, string confirmarClave)
+        {
+            if (nuevaClave != confirmarClave)
+            {
+                ViewBag.Error = "Las contraseñas no coinciden";
+                return View();
+            }
 
+            string usuarioActual = Session["Usuario"]?.ToString() ?? User.Identity.Name;
+            var respuesta = CambiarClaveUsuario(usuarioActual, claveActual, nuevaClave);
+
+            if (respuesta.estado)
+            {
+                TempData["SuccessMessage"] = respuesta.mensaje;
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Error = respuesta.mensaje;
+                return View();
+            }
+        }
         public Respuesta<int> CambiarClaveUsuario(string XEUSU_NOMBRE, string XEUSU_CONTRA, string nuevaClave)
         {
             Respuesta<int> response = new Respuesta<int>();
@@ -453,12 +626,11 @@ namespace Monster_University.Controllers
             return response;
         }
     }
-
     // Clase auxiliar para manejar respuestas
     public class Respuesta<T>
-    {
-        public bool estado { get; set; }
-        public string mensaje { get; set; }
-        public T objeto { get; set; }
+        {
+            public bool estado { get; set; }
+            public string mensaje { get; set; }
+            public T objeto { get; set; }
+        }
     }
-}
