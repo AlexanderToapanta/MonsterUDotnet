@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using CapaDatos;
 using CapaModelo;
-using CapaDatos;
-using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Monster_University.Services;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web;
+using System.Web.Mvc;
 
 
 namespace Monster_University.Controllers
@@ -162,6 +164,7 @@ namespace Monster_University.Controllers
                     ViewBag.EstadosCiviles = CD_EstadoCivil.Instancia.ObtenerEstadosCiviles();
                     ViewBag.IdGenerado = model.PEPER_ID;
 
+
                     // Si se guardó una imagen pero falló el registro, eliminarla
                     if (!string.IsNullOrEmpty(model.PEPER_FOTO))
                     {
@@ -187,6 +190,7 @@ namespace Monster_University.Controllers
                 System.Diagnostics.Debug.WriteLine("👤 Creando usuario automático...");
 
                 var usuarioCreado = CrearUsuarioParaPersona(model);
+                bool correoEnviado = false;
 
                 if (usuarioCreado != null)
                 {
@@ -196,20 +200,48 @@ namespace Monster_University.Controllers
 
                     System.Diagnostics.Debug.WriteLine($"✅ Usuario creado con ID: {usuarioCreado.XEUSU_ID}");
 
-                    TempData["SuccessMessage"] = $"Persona creada con ID: {model.PEPER_ID} y Usuario creado con ID: {usuarioCreado.XEUSU_ID}";
+                    // 5. ENVIAR CORREO CON CREDENCIALES (SÍNCRONO - como Java)
+                    try
+                    {
+                        System.Diagnostics.Debug.WriteLine("📧 Intentando enviar correo con credenciales...");
+                        correoEnviado = EnviarCorreoCredencialesSincrono(model, usuarioCreado); // ← SÍNCRONO
+
+                        if (correoEnviado)
+                        {
+                            System.Diagnostics.Debug.WriteLine("✅ Correo enviado exitosamente");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("⚠️ No se pudo enviar el correo");
+                        }
+                    }
+                    catch (Exception exEmail)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"⚠️ Error enviando correo: {exEmail.Message}");
+                        // No fallamos por error en correo, solo registramos
+                    }
+
+                    // Mensaje según si se envió correo o no
+                    string mensajeBase = $"✅ Persona creada con ID: {model.PEPER_ID} y Usuario creado con ID: {usuarioCreado.XEUSU_ID}";
+
+                    if (correoEnviado)
+                    {
+                        TempData["SuccessMessage"] = $"{mensajeBase}<br/>📧 Las credenciales han sido enviadas al correo: {model.PEPER_EMAIL}";
+                    }
+                    else
+                    {
+                        TempData["WarningMessage"] = $"{mensajeBase}<br/>⚠️ Las credenciales NO se pudieron enviar por correo. Usuario: {GenerarNombreUsuario(model)}, Contraseña: {model.PEPER_CEDULA}";
+                    }
                 }
                 else
                 {
                     System.Diagnostics.Debug.WriteLine("⚠️ No se pudo crear el usuario automático");
-
                     TempData["WarningMessage"] = $"Persona creada con ID: {model.PEPER_ID} pero no se pudo crear el usuario automático.";
                 }
 
-                // 5. REDIRECCIONAR PARA LIMPIAR FORMULARIO
+                // 6. REDIRECCIONAR PARA LIMPIAR FORMULARIO
                 System.Diagnostics.Debug.WriteLine("🔄 Redirigiendo...");
-
                 return RedirectToAction("crearpersonal");
-
             }
             catch (Exception ex)
             {
@@ -231,7 +263,43 @@ namespace Monster_University.Controllers
             }
         }
 
-        // GET: ControladorPersonal/editarpersonal/{id}
+        // =====================================================================
+        // MÉTODO SÍNCRONO PARA ENVIAR CORREO (igual que en Java)
+        // =====================================================================
+        private bool EnviarCorreoCredencialesSincrono(Personal persona, Usuario usuario)
+        {
+            try
+            {
+                // Verificar que el email no esté vacío
+                if (string.IsNullOrWhiteSpace(persona.PEPER_EMAIL))
+                {
+                    System.Diagnostics.Debug.WriteLine("❌ No se puede enviar correo: Email vacío");
+                    return false;
+                }
+
+                // Usar el EmailService
+                var emailService = new EmailService();
+
+                // Generar nombre de usuario y contraseña
+                string nombreUsuario = GenerarNombreUsuario(persona);
+                string contrasenia = persona.PEPER_CEDULA; // Contraseña = cédula
+
+                System.Diagnostics.Debug.WriteLine($"📧 Enviando a: {persona.PEPER_EMAIL}");
+                System.Diagnostics.Debug.WriteLine($"👤 Usuario generado: {nombreUsuario}");
+
+                // Enviar correo SÍNCRONO (bloqueante)
+                return emailService.EnviarCredencialesSincrono(
+                    persona.PEPER_EMAIL,
+                    nombreUsuario,
+                    contrasenia
+                );
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ Error en EnviarCorreoCredencialesSincrono: {ex.Message}");
+                return false;
+            }
+        }
         public ActionResult editarpersonal(string id)
         {
             if (string.IsNullOrEmpty(id))

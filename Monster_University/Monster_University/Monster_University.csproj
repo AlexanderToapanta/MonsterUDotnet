@@ -207,6 +207,7 @@
     <Compile Include="Controllers\ControladorPersonalController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ControladorUsuarioController.cs" />
+    <Compile Include="Services\EmailService.cs" />
     <Compile Include="Views\index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
