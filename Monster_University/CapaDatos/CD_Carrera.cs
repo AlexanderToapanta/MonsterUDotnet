@@ -116,6 +116,48 @@ namespace CapaDatos
             return resultado;
         }
 
+        public List<Carrera> BuscarCarreras(string nombre, int? creditosMin, int? creditosMax)
+        {
+            var lista = new List<Carrera>();
+            using (SqlConnection cn = new SqlConnection(Conexion.CN))
+            {
+                string query = @"SELECT MECARR_ID, MECARR_NOMBRE, MECARR_MAX_CRED, MECARR_MIN_CRED
+                         FROM MECARR_CARRERA
+                         WHERE (@Nombre IS NULL OR MECARR_NOMBRE LIKE '%' + @Nombre + '%')
+                           AND (@MinCred IS NULL OR MECARR_MIN_CRED >= @MinCred)
+                           AND (@MaxCred IS NULL OR MECARR_MAX_CRED <= @MaxCred)
+                         ORDER BY MECARR_NOMBRE";
+
+                SqlCommand cmd = new SqlCommand(query, cn);
+                cmd.Parameters.AddWithValue("@Nombre", string.IsNullOrWhiteSpace(nombre) ? (object)DBNull.Value : nombre);
+                cmd.Parameters.AddWithValue("@MinCred", creditosMin.HasValue ? (object)creditosMin.Value : DBNull.Value);
+                cmd.Parameters.AddWithValue("@MaxCred", creditosMax.HasValue ? (object)creditosMax.Value : DBNull.Value);
+
+                try
+                {
+                    cn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Carrera
+                            {
+                                MECARR_ID = dr["MECARR_ID"]?.ToString(),
+                                MECARR_NOMBRE = dr["MECARR_NOMBRE"]?.ToString(),
+                                MECARR_MAXCRED = dr["MECARR_MAX_CRED"] != DBNull.Value ? Convert.ToInt32(dr["MECARR_MAX_CRED"]) : 0,
+                                MECARR_MINCRED = dr["MECARR_MIN_CRED"] != DBNull.Value ? Convert.ToInt32(dr["MECARR_MIN_CRED"]) : 0
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lista = null;
+                }
+            }
+            return lista;
+        }
+
         public bool ModificarCarrera(Carrera c)
         {
             bool resultado = false;

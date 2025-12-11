@@ -16,3 +16,12 @@ C:\Users\eluce\codigo\uni\web_avanzada\2\MonsterUDotnet\Monster_University\CapaD
 C:\Users\eluce\codigo\uni\web_avanzada\2\MonsterUDotnet\Monster_University\CapaDatos\obj\Debug\CapaDatos.csproj.Up2Date
 C:\Users\eluce\codigo\uni\web_avanzada\2\MonsterUDotnet\Monster_University\CapaDatos\obj\Debug\CapaDatos.dll
 C:\Users\eluce\codigo\uni\web_avanzada\2\MonsterUDotnet\Monster_University\CapaDatos\obj\Debug\CapaDatos.pdb
+C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\CapaDatos\bin\Debug\CapaDatos.dll
+C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\CapaDatos\bin\Debug\CapaDatos.pdb
+C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\CapaDatos\bin\Debug\CapaModelo.dll
+C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\CapaDatos\bin\Debug\CapaModelo.pdb
+C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\CapaDatos\obj\Debug\CapaDatos.csproj.AssemblyReference.cache
+C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\CapaDatos\obj\Debug\CapaDatos.csproj.CoreCompileInputs.cache
+C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\CapaDatos\obj\Debug\CapaDatos.csproj.Up2Date
+C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\CapaDatos\obj\Debug\CapaDatos.dll
+C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\CapaDatos\obj\Debug\CapaDatos.pdb

@@ -23,7 +23,7 @@ namespace Monster_University.Controllers
         public ControladorPersonalController()
         {
             // Ruta específica que indicaste
-            _rutaBaseImagenes = @"C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\img\";
+            _rutaBaseImagenes = @"C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\img";
 
             // Crear directorio si no existe
             if (!Directory.Exists(_rutaBaseImagenes))
@@ -48,7 +48,7 @@ namespace Monster_University.Controllers
             model.PEPER_ID = nuevoId;
 
             // Inicializar ruta de imágenes si no existe
-            string rutaImagenes = @"C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\img\";
+            string rutaImagenes = @"C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\img";
             if (!Directory.Exists(rutaImagenes))
             {
                 Directory.CreateDirectory(rutaImagenes);
@@ -106,7 +106,7 @@ namespace Monster_University.Controllers
                         : "temp_" + DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
                     string nombreArchivoImagen = $"{cedulaLimpia}_{DateTimeOffset.Now.ToUnixTimeMilliseconds()}{extension}";
-                    string rutaImagenes = @"C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\img\";
+                    string rutaImagenes = @"C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\img";
                     string rutaCompleta = Path.Combine(rutaImagenes, nombreArchivoImagen);
 
                     // Asegurar que existe el directorio
@@ -171,7 +171,7 @@ namespace Monster_University.Controllers
                         try
                         {
                             string rutaImagen = Path.Combine(
-                                @"C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\img\",
+                                @"C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\img",
                                 model.PEPER_FOTO);
                             if (System.IO.File.Exists(rutaImagen))
                             {

@@ -257,7 +257,7 @@
                         </asp:HyperLink>
                         
                         <asp:HyperLink ID="lnkReportes" runat="server" 
-                            NavigateUrl="~/Reportes.aspx"
+                            NavigateUrl="~/Reporte.aspx"
                             CssClass="quick-action-btn">
                             <i class="fas fa-chart-bar me-2"></i>Reportes
                         </asp:HyperLink>
