@@ -44,7 +44,7 @@
                     </div>
                 }
 
-                @using (Html.BeginForm("crearpersonal", "ControladorPersonal", FormMethod.Post, new { id = "formCrearPersona", @class = "needs-validation", @novalidate = "novalidate" }))
+                @using (Html.BeginForm("crearpersonal", "ControladorPersonal", FormMethod.Post, new { id = "formCrearPersona", enctype = "multipart/form-data", @class = "needs-validation", @novalidate = "novalidate" }))
                 {
                     @Html.AntiForgeryToken()
 
@@ -77,19 +77,20 @@
                                     </div>
                                 </div>
 
-                                <!-- Tipo de Persona -->
+                                <!-- Fecha de Ingreso -->
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">
-                                            <i class="fas fa-user-tag me-1"></i>Tipo de Persona: <span class="text-danger">*</span>
+                                            <i class="fas fa-calendar-alt me-1"></i>Fecha de Ingreso: <span class="text-danger">*</span>
                                         </label>
-                                        <select name="PEPER_TIPO" class="form-control" required>
-                                            <option value="">Seleccione tipo</option>
-                                            <option value="Administrador del Sistema">Administrador del Sistema</option>
-                                            <option value="Docente">Docente</option>
-                                            <option value="Administrador de matriculas">Administrador de matrículas</option>
-                                            <option value="Secretaria Academica">Secretaría Académica</option>
-                                        </select>
+                                        @Html.TextBoxFor(m => m.PEPEPER_FECH_INGR, "{0:yyyy-MM-dd}", new
+                                        {
+                                            @class = "form-control",
+                                            type = "date",
+                                            required = "required",
+                                            placeholder = "Seleccione fecha"
+                                        })
+                                        <small class="text-muted">(Fecha en que ingresó a la institución)</small>
                                     </div>
                                 </div>
                             </div>
@@ -101,11 +102,13 @@
                                         <label class="form-label fw-bold">
                                             <i class="fas fa-user me-1"></i>Nombre: <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="PEPER_NOMBRE"
-                                               class="form-control"
-                                               placeholder="Ingrese el nombre"
-                                               maxlength="25"
-                                               required>
+                                        @Html.TextBoxFor(m => m.PEPER_NOMBRE, new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "Ingrese el nombre",
+                                            maxlength = "25",
+                                            required = "required"
+                                        })
                                         <small class="text-muted">(Máximo 25 caracteres)</small>
                                     </div>
                                 </div>
@@ -115,29 +118,31 @@
                                         <label class="form-label fw-bold">
                                             <i class="fas fa-user me-1"></i>Apellido: <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" name="PEPER_APELLIDO"
-                                               class="form-control"
-                                               placeholder="Ingrese el apellido"
-                                               maxlength="25"
-                                               required>
+                                        @Html.TextBoxFor(m => m.PEPER_APELLIDO, new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "Ingrese el apellido",
+                                            maxlength = "25",
+                                            required = "required"
+                                        })
                                         <small class="text-muted">(Máximo 25 caracteres)</small>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Cédula y Celular -->
+                            <!-- Fecha de Nacimiento y Celular -->
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">
-                                            <i class="fas fa-address-card me-1"></i>Cédula: <span class="text-danger">*</span>
+                                            <i class="fas fa-birthday-cake me-1"></i>Fecha de Nacimiento:
                                         </label>
-                                        <input type="text" name="PEPER_CEDULA"
-                                               class="form-control"
-                                               placeholder="Ej: 1234567890"
-                                               maxlength="15"
-                                               required>
-                                        <small class="text-muted">(Máximo 15 caracteres)</small>
+                                        @Html.TextBoxFor(m => m.PEPER_FECHA_NAC, "{0:yyyy-MM-dd}", new
+                                        {
+                                            @class = "form-control",
+                                            type = "date"
+                                        })
+                                        <small class="text-muted">(Opcional)</small>
                                     </div>
                                 </div>
 
@@ -146,101 +151,185 @@
                                         <label class="form-label fw-bold">
                                             <i class="fas fa-phone me-1"></i>Celular:
                                         </label>
-                                        <input type="text" name="PEPER_CELULAR"
-                                               class="form-control"
-                                               placeholder="Ej: 0991234567 (opcional)"
-                                               maxlength="15">
-                                        <small class="text-muted">(Máximo 15 caracteres, opcional)</small>
+                                        @Html.TextBoxFor(m => m.PEPER_CELULAR, new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "Ej: 0991234567 (opcional)",
+                                            maxlength = "15"
+                                        })
+                                        <small class="text-muted">(Opcional, formato: 09XXXXXXXX)</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- SECCIÓN 2: Información de Contacto -->
-                    <div class="card mb-4">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0">
-                                <i class="fas fa-envelope me-2"></i>Información de Contacto
-                            </h5>
+                    <!-- Contenedor de pestañas -->
+                    <div class="tab-container mb-4">
+                        <!-- Botones de pestañas -->
+                        <div class="tab-buttons">
+                            <button type="button" class="tab-button active" onclick="showTab('datosPersonales')">
+                                <i class="fas fa-user-circle me-2"></i>📋 Datos Personales
+                            </button>
+                            <button type="button" class="tab-button" onclick="showTab('contactos')">
+                                <i class="fas fa-envelope me-2"></i>📧 Contactos
+                            </button>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
+
+                        <!-- Contenido de pestañas -->
+                        <div class="tab-content">
+                            <!-- Pestaña Datos Personales -->
+                            <div id="datosPersonales" class="tab-pane active">
+                                <div style="padding: 20px;">
+                                    <!-- Tipo de Persona -->
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">
-                                            <i class="fas fa-at me-1"></i>Email: <span class="text-danger">*</span>
+                                            <i class="fas fa-user-tag me-1"></i>Tipo de Persona: <span class="text-danger">*</span>
                                         </label>
-                                        <input type="email" name="PEPER_EMAIL"
-                                               class="form-control"
-                                               placeholder="ejemplo@correo.com"
-                                               maxlength="30"
-                                               required>
-                                        <small class="text-muted">(Máximo 30 caracteres)</small>
+                                        <select name="PEPER_TIPO" class="form-control" required>
+                                            <option value="">Seleccione tipo</option>
+                                            <option value="Administrador del Sistema">Administrador del Sistema</option>
+                                            <option value="Docente">Docente</option>
+                                            <option value="Administrador de matriculas">Administrador de matrículas</option>
+                                            <option value="Secretaria Academica">Secretaría Académica</option>
+                                        </select>
+                                        @Html.HiddenFor(m => m.PEPER_TIPO, new { id = "PEPER_TIPO_Hidden" })
                                     </div>
-                                </div>
 
-                                <div class="col-md-6">
+                                    <!-- Cédula -->
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">
-                                            <i class="fas fa-calendar-alt me-1"></i>Fecha de Ingreso: <span class="text-danger">*</span>
+                                            <i class="fas fa-address-card me-1"></i>Cédula: <span class="text-danger">*</span>
                                         </label>
-                                        <input type="date" name="PEPEPER_FECH_INGR"
-                                               class="form-control"
-                                               required>
-                                        <small class="text-muted">(Fecha en que ingresó a la institución)</small>
+                                        @Html.TextBoxFor(m => m.PEPER_CEDULA, new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "Ej: 1234567890",
+                                            maxlength = "15",
+                                            required = "required"
+                                        })
+                                        <small class="text-muted">(Máximo 15 caracteres)</small>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- SECCIÓN 3: Información Personal -->
-                    <div class="card mb-4">
-                        <div class="card-header bg-warning text-dark">
-                            <h5 class="mb-0">
-                                <i class="fas fa-user-circle me-2"></i>Información Personal
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <!-- Sexo -->
-                                <div class="col-md-6">
+                                    <!-- Sexo -->
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">
                                             <i class="fas fa-venus-mars me-1"></i>Sexo: <span class="text-danger">*</span>
                                         </label>
                                         <div class="radio-group mt-2">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="PESEX_ID" id="sexoM" value="M" required>
-                                                <label class="form-check-label" for="sexoM">Masculino</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="PESEX_ID" id="sexoF" value="F" required>
-                                                <label class="form-check-label" for="sexoF">Femenino</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="PESEX_ID" id="sexoO" value="O" required>
-                                                <label class="form-check-label" for="sexoO">Otro</label>
-                                            </div>
+                                            @if (ViewBag.Sexos != null)
+                                            {
+                                                foreach (var sexo in ViewBag.Sexos)
+                                                {
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio"
+                                                               name="PESEX_ID" id="sexo_@sexo.PESEX_ID"
+                                                               value="@sexo.PESEX_ID" required>
+                                                        <label class="form-check-label" for="sexo_@sexo.PESEX_ID">
+                                                            @sexo.PESEX_DESCRI
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
                                         </div>
+                                        @Html.HiddenFor(m => m.PESEX_ID, new { id = "PESEX_ID_Hidden" })
                                     </div>
-                                </div>
 
-                                <!-- Estado Civil (opcional) -->
-                                <div class="col-md-6">
+                                    <!-- Estado Civil -->
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">
                                             <i class="fas fa-heart me-1"></i>Estado Civil:
                                         </label>
-                                        <select name="PEESC_ID" class="form-control">
+                                        <select name="PEESC_ID" class="form-control" id="PEESC_ID">
                                             <option value="">Seleccione estado civil (opcional)</option>
-                                            <option value="S">Soltero/a</option>
-                                            <option value="C">Casado/a</option>
-                                            <option value="V">Viudo/a</option>
-                                            <option value="D">Divorciado/a</option>
-                                            <option value="U">Unión Libre</option>
+                                            @if (ViewBag.EstadosCiviles != null)
+                                            {
+                                                foreach (var estado in ViewBag.EstadosCiviles)
+                                                {
+                                                    <option value="@estado.PEESC_ID">@estado.PEESC_DESCRI</option>
+                                                }
+                                            }
                                         </select>
+                                        @Html.HiddenFor(m => m.PEESC_ID, new { id = "PEESC_ID_Hidden" })
+                                    </div>
+
+                                    <!-- Imagen de perfil -->
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-image me-1"></i>Imagen de Perfil:
+                                        </label>
+
+                                        <!-- FileUpload simple -->
+                                        <input type="file" name="imagenPersona" id="imagenPersona"
+                                               class="form-control"
+                                               accept=".jpg,.jpeg,.png,.gif"
+                                               style="margin-bottom: 10px;" />
+
+                                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                            <!-- Botón Subir Imagen -->
+                                            <button type="button" class="btn btn-success" onclick="subirImagen()">
+                                                <i class="fas fa-upload me-1"></i>Subir Imagen
+                                            </button>
+
+                                            <!-- Botón Eliminar Imagen -->
+                                            <button type="button" class="btn btn-danger" onclick="eliminarImagen()"
+                                                    id="btnEliminarImagen" style="display: none;">
+                                                <i class="fas fa-trash me-1"></i>Eliminar Imagen
+                                            </button>
+                                        </div>
+
+                                        <small class="text-muted">(Opcional, máximo 1MB, formatos: JPG, PNG, GIF)</small>
+
+                                        <!-- Mensaje de imagen -->
+                                        <div id="mensajeImagen" class="mt-2"></div>
+
+                                        <!-- Información de la imagen subida -->
+                                        <div id="infoImagen" class="mt-2" style="display: none;">
+                                            <div style="padding: 8px; background-color: #f8f9fa; border-radius: 4px; font-size: 0.9rem;">
+                                                <span id="nombreArchivo"></span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Vista previa de imagen -->
+                                        <div id="vistaPreviaImagen" class="mt-3 text-center" style="display: none;">
+                                            <img id="previewImage"
+                                                 width="150"
+                                                 height="150"
+                                                 style="border-radius: 8px; border: 2px solid #ddd;
+                                                        object-fit: cover; max-width: 150px; max-height: 150px;
+                                                        box-shadow: 0 2px 5px rgba(0,0,0,0.1);" />
+                                        </div>
+
+                                        <!-- Campo oculto para el nombre de la imagen -->
+                                        @Html.HiddenFor(m => m.PEPER_FOTO, new { id = "PEPER_FOTO" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pestaña Contactos -->
+                            <div id="contactos" class="tab-pane">
+                                <div style="padding: 20px;">
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-at me-1"></i>Email: <span class="text-danger">*</span>
+                                        </label>
+                                        @Html.TextBoxFor(m => m.PEPER_EMAIL, new
+                                        {
+                                            @class = "form-control",
+                                            type = "email",
+                                            placeholder = "ejemplo@correo.com",
+                                            maxlength = "30",
+                                            required = "required"
+                                        })
+                                        <small class="text-muted">(Máximo 30 caracteres)</small>
+                                    </div>
+
+                                    <!-- Nota informativa -->
+                                    <div class="form-help" style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-left: 4px solid #17a2b8;">
+                                        <p><strong>📞 Información de contacto:</strong></p>
+                                        <p>• El celular ya fue completado en la sección de Información Básica</p>
+                                        <p>• Para modificar el celular, regrese a la sección superior</p>
                                     </div>
                                 </div>
                             </div>
@@ -346,6 +435,44 @@
         $(document).ready(function () {
             console.log("=== FORMULARIO CREAR PERSONA CARGADO ===");
 
+            // Actualizar campos ocultos cuando cambian los selectores
+            $('select[name="PEPER_TIPO"]').change(function() {
+                $('#PEPER_TIPO_Hidden').val($(this).val());
+            });
+
+            $('select[name="PEESC_ID"]').change(function() {
+                $('#PEESC_ID_Hidden').val($(this).val());
+            });
+
+            $('input[name="PESEX_ID"]').change(function() {
+                $('#PESEX_ID_Hidden').val($(this).val());
+            });
+
+            // Sincronizar valores iniciales
+            $('#PEPER_TIPO_Hidden').val($('select[name="PEPER_TIPO"]').val());
+            $('#PEESC_ID_Hidden').val($('select[name="PEESC_ID"]').val());
+            $('#PESEX_ID_Hidden').val($('input[name="PESEX_ID"]:checked').val());
+
+            // Vista previa de imagen
+            $('#imagenPersona').change(function() {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#previewImage').attr('src', e.target.result);
+                        $('#vistaPreviaImagen').show();
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                    $('#nombreArchivo').text('📁 Archivo: ' + this.files[0].name);
+                    $('#infoImagen').show();
+                }
+            });
+
+            // Si ya hay una imagen en el modelo, mostrarla
+            var imagenActual = $('#PEPER_FOTO').val();
+            if (imagenActual) {
+                mostrarImagenActual(imagenActual);
+            }
+
             // Botón limpiar formulario
             $('#btnLimpiar').click(function () {
                 if (confirm('¿Está seguro de que desea limpiar el formulario?')) {
@@ -402,7 +529,7 @@
                     isValid = false;
                 }
 
-                // Validar fecha
+                // Validar fecha de ingreso
                 if (!$('input[name="PEPEPER_FECH_INGR"]').val()) {
                     $('input[name="PEPEPER_FECH_INGR"]').addClass('is-invalid');
                     isValid = false;
@@ -430,7 +557,6 @@
                 }
             });
 
-           
             // Auto-hide alerts after 5 seconds
             setTimeout(function () {
                 $('.alert').alert('close');
@@ -438,15 +564,177 @@
 
             // Enfocar primer campo editable
             $('input[name="PEPER_NOMBRE"]').focus();
-
-            // Debug: Mostrar valores al cambiar campos
-            $('input, select').on('change', function() {
-                console.log('Campo cambiado:', $(this).attr('name'), '=', $(this).val());
-            });
         });
+
+        // Función para subir imagen
+        function subirImagen() {
+            var fileInput = document.getElementById('imagenPersona');
+            if (!fileInput.files[0]) {
+                mostrarMensaje('Por favor seleccione una imagen primero', 'warning');
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('imagenSubida', fileInput.files[0]);
+            formData.append('cedulaPersona', $('#PEPER_CEDULA').val());
+
+            $.ajax({
+                url: '@Url.Action("SubirImagen", "ControladorPersonal")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if (data.success) {
+                        $('#PEPER_FOTO').val(data.fileName);
+                        mostrarMensaje('Imagen subida correctamente', 'success');
+                        $('#btnEliminarImagen').show();
+                        $('#nombreArchivo').text('📁 Archivo: ' + data.fileName);
+                        $('#infoImagen').show();
+                    } else {
+                        mostrarMensaje('Error: ' + data.message, 'danger');
+                    }
+                },
+                error: function() {
+                    mostrarMensaje('Error en la solicitud', 'danger');
+                }
+            });
+        }
+
+        // Función para eliminar imagen
+        function eliminarImagen() {
+            var nombreArchivo = $('#PEPER_FOTO').val();
+            if (!nombreArchivo) {
+                mostrarMensaje('No hay imagen para eliminar', 'warning');
+                return;
+            }
+
+            if (confirm('¿Está seguro de eliminar esta imagen?')) {
+                $.ajax({
+                    url: '@Url.Action("EliminarImagen", "ControladorPersonal")',
+                    type: 'POST',
+                    data: JSON.stringify({ nombreArchivo: nombreArchivo }),
+                    contentType: 'application/json',
+                    success: function(data) {
+                        if (data.success) {
+                            $('#PEPER_FOTO').val('');
+                            $('#vistaPreviaImagen').hide();
+                            $('#infoImagen').hide();
+                            $('#btnEliminarImagen').hide();
+                            $('#imagenPersona').val('');
+                            mostrarMensaje('Imagen eliminada correctamente', 'success');
+                        } else {
+                            mostrarMensaje('Error: ' + data.message, 'danger');
+                        }
+                    },
+                    error: function() {
+                        mostrarMensaje('Error en la solicitud', 'danger');
+                    }
+                });
+            }
+        }
+
+        // Función para mostrar imagen actual
+        function mostrarImagenActual(nombreArchivo) {
+            $.ajax({
+                url: '@Url.Action("GetUrlImagen", "ControladorPersonal")',
+                type: 'GET',
+                data: { nombre: nombreArchivo },
+                success: function(url) {
+                    if (url) {
+                        $('#previewImage').attr('src', url);
+                        $('#vistaPreviaImagen').show();
+                        $('#nombreArchivo').text('📁 Archivo: ' + nombreArchivo);
+                        $('#infoImagen').show();
+                        $('#btnEliminarImagen').show();
+                    }
+                }
+            });
+        }
+
+        // Función para mostrar mensajes
+        function mostrarMensaje(texto, tipo) {
+            $('#mensajeImagen').html(
+                '<div class="alert alert-' + tipo + ' alert-dismissible fade show" role="alert">' +
+                texto +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>'
+            );
+
+            setTimeout(function() {
+                $('#mensajeImagen').html('');
+            }, 5000);
+        }
+
+        // Función para validar email
+        function isValidEmail(email) {
+          
+            return re.test(email);
+        }
+
+        // Función para mostrar pestañas
+        function showTab(tabName) {
+            // Ocultar todas las pestañas
+            $('.tab-pane').removeClass('active');
+            // Mostrar la pestaña seleccionada
+            $('#' + tabName).addClass('active');
+
+            // Actualizar botones activos
+            $('.tab-button').removeClass('active');
+            // Activar el botón correspondiente
+            $(event.target).addClass('active');
+        }
     </script>
 
     <style>
+        /* Estilos para las pestañas */
+        .tab-container {
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .tab-buttons {
+            display: flex;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+            .tab-button:hover {
+                background-color: #e9ecef;
+            }
+
+            .tab-button.active {
+                color: #2a64c5;
+                border-bottom: 3px solid #2a64c5;
+                background-color: #e7f3ff;
+            }
+
+        .tab-content {
+            background-color: white;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+            .tab-pane.active {
+                display: block;
+            }
+
         /* Contenedor principal con imagen de fondo */
         .main-background {
             background-image: url('/Content/Images/university-background.jpg');
@@ -579,6 +867,15 @@
             .radio-group {
                 flex-direction: column;
                 gap: 8px;
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                width: 100%;
+                text-align: left;
             }
         }
     </style>

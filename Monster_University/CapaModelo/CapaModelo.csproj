@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carrera.cs" />
+    <Compile Include="EstadoCivil.cs" />
     <Compile Include="Personal.cs" />
     <Compile Include="Sexo.cs" />
     <Compile Include="Usuario.cs" />

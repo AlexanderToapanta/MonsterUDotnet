@@ -16,8 +16,21 @@ namespace CapaModelo
         public string PEPER_CELULAR { get; set; }
         public string PEPER_TIPO { get; set; }
         public DateTime? PEPEPER_FECH_INGR { get; set; }
-        public string PEESC_ID { get; set; } 
-        public string PESEX_ID { get; set; } 
-        public string XEUSU_ID { get; set; } 
+        public DateTime? PEPER_FECHA_NAC { get; set; }
+        public string PEPER_FOTO { get; set; }
+
+        // Llave foránea a Estado Civil
+        public string PEESC_ID { get; set; }
+
+        // Propiedad de navegación (opcional)
+        public PEESC_ESTCIV EstadoCivil { get; set; }
+
+        // Llave foránea a Sexo
+        public string PESEX_ID { get; set; }
+
+        // Propiedad de navegación (opcional)
+        public PESEX_SEXO Sexo { get; set; }
+
+        public string XEUSU_ID { get; set; }
     }
 }
