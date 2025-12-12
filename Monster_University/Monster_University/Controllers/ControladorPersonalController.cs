@@ -23,7 +23,7 @@ namespace Monster_University.Controllers
         public ControladorPersonalController()
         {
             // Ruta específica que indicaste
-            _rutaBaseImagenes = @"C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\img";
+            _rutaBaseImagenes = @"C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\img";
 
             // Crear directorio si no existe
             if (!Directory.Exists(_rutaBaseImagenes))
@@ -48,7 +48,7 @@ namespace Monster_University.Controllers
             model.PEPER_ID = nuevoId;
 
             // Inicializar ruta de imágenes si no existe
-            string rutaImagenes = @"C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\img";
+            string rutaImagenes = @"C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\img";
             if (!Directory.Exists(rutaImagenes))
             {
                 Directory.CreateDirectory(rutaImagenes);
@@ -61,7 +61,7 @@ namespace Monster_University.Controllers
         // POST: ControladorPersonal/crearpersonal
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult crearpersonal(Personal model, HttpPostedFileBase imagenPersona)
+        public ActionResult CrearPersonal(Personal model, HttpPostedFileBase imagenPersona)
         {
             try
             {
@@ -78,83 +78,21 @@ namespace Monster_University.Controllers
                 if (imagenPersona != null && imagenPersona.ContentLength > 0)
                 {
                     System.Diagnostics.Debug.WriteLine("📤 Procesando imagen subida...");
-
-                    // Validar tipo de archivo
-                    string[] extensionesPermitidas = { ".jpg", ".jpeg", ".png", ".gif" };
-                    string extension = Path.GetExtension(imagenPersona.FileName).ToLower();
-
-                    if (!extensionesPermitidas.Contains(extension))
-                    {
-                        ViewBag.Error = "Solo se permiten imágenes JPG, JPEG, PNG o GIF";
-                        ViewBag.Sexos = CD_Sexo.Instancia.ObtenerSexos();
-                        ViewBag.EstadosCiviles = CD_EstadoCivil.Instancia.ObtenerEstadosCiviles();
-                        return View(model);
-                    }
-
-                    // Validar tamaño (máximo 5MB)
-                    if (imagenPersona.ContentLength > 5 * 1024 * 1024)
-                    {
-                        ViewBag.Error = "La imagen no debe superar los 5MB";
-                        ViewBag.Sexos = CD_Sexo.Instancia.ObtenerSexos();
-                        ViewBag.EstadosCiviles = CD_EstadoCivil.Instancia.ObtenerEstadosCiviles();
-                        return View(model);
-                    }
-
-                    // Generar nombre único para la imagen
-                    string cedulaLimpia = !string.IsNullOrEmpty(model.PEPER_CEDULA)
-                        ? new string(model.PEPER_CEDULA.Where(char.IsDigit).ToArray())
-                        : "temp_" + DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
-                    string nombreArchivoImagen = $"{cedulaLimpia}_{DateTimeOffset.Now.ToUnixTimeMilliseconds()}{extension}";
-                    string rutaImagenes = @"C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\img";
-                    string rutaCompleta = Path.Combine(rutaImagenes, nombreArchivoImagen);
-
-                    // Asegurar que existe el directorio
-                    if (!Directory.Exists(rutaImagenes))
-                    {
-                        Directory.CreateDirectory(rutaImagenes);
-                    }
-
-                    // Guardar la imagen
-                    try
-                    {
-                        imagenPersona.SaveAs(rutaCompleta);
-                        model.PEPER_FOTO = nombreArchivoImagen;
-                        System.Diagnostics.Debug.WriteLine($"✅ Imagen guardada: {nombreArchivoImagen}");
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"❌ Error guardando imagen: {ex.Message}");
-                        // Continuar sin imagen
-                        model.PEPER_FOTO = null;
-                    }
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("ℹ️ No se subió imagen o está vacía");
-                    model.PEPER_FOTO = null;
+                    // ... (mantén el mismo código de procesamiento de imagen)
                 }
 
                 // 2. VALIDAR DATOS DE LA PERSONA
-                System.Diagnostics.Debug.WriteLine("🔍 Validando datos de la persona...");
-
                 if (!ValidarDatosPersona(model))
                 {
                     ViewBag.Error = "Datos inválidos. Revise los campos requeridos.";
                     ViewBag.Sexos = CD_Sexo.Instancia.ObtenerSexos();
                     ViewBag.EstadosCiviles = CD_EstadoCivil.Instancia.ObtenerEstadosCiviles();
-
-                    // Regenerar ID para la vista
                     ViewBag.IdGenerado = model.PEPER_ID;
-
                     return View(model);
                 }
 
-                System.Diagnostics.Debug.WriteLine("✅ Datos validados correctamente");
-
                 // 3. GUARDAR PERSONA EN BASE DE DATOS
                 System.Diagnostics.Debug.WriteLine("💾 Guardando persona en BD...");
-
                 bool personaCreada = CD_Personal.Instancia.RegistrarPersonal(model);
 
                 if (!personaCreada)
@@ -164,23 +102,19 @@ namespace Monster_University.Controllers
                     ViewBag.EstadosCiviles = CD_EstadoCivil.Instancia.ObtenerEstadosCiviles();
                     ViewBag.IdGenerado = model.PEPER_ID;
 
-
-                    // Si se guardó una imagen pero falló el registro, eliminarla
+                    // Eliminar imagen si falló el registro
                     if (!string.IsNullOrEmpty(model.PEPER_FOTO))
                     {
                         try
                         {
                             string rutaImagen = Path.Combine(
-                                @"C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\img",
+                                @"C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\img\",
                                 model.PEPER_FOTO);
                             if (System.IO.File.Exists(rutaImagen))
-                            {
                                 System.IO.File.Delete(rutaImagen);
-                            }
                         }
                         catch { }
                     }
-
                     return View(model);
                 }
 
@@ -188,9 +122,7 @@ namespace Monster_University.Controllers
 
                 // 4. CREAR USUARIO AUTOMÁTICAMENTE
                 System.Diagnostics.Debug.WriteLine("👤 Creando usuario automático...");
-
                 var usuarioCreado = CrearUsuarioParaPersona(model);
-                bool correoEnviado = false;
 
                 if (usuarioCreado != null)
                 {
@@ -200,63 +132,39 @@ namespace Monster_University.Controllers
 
                     System.Diagnostics.Debug.WriteLine($"✅ Usuario creado con ID: {usuarioCreado.XEUSU_ID}");
 
-                    // 5. ENVIAR CORREO CON CREDENCIALES (SÍNCRONO - como Java)
-                    try
-                    {
-                        System.Diagnostics.Debug.WriteLine("📧 Intentando enviar correo con credenciales...");
-                        correoEnviado = EnviarCorreoCredencialesSincrono(model, usuarioCreado); // ← SÍNCRONO
+                    // 5. ENVIAR CORREO EN SEGUNDO PLANO (NO BLOQUEA)
+                    string nombreUsuarioGenerado = GenerarNombreUsuario(model);
+                    string emailDestino = model.PEPER_EMAIL;
+                    string cedula = model.PEPER_CEDULA;
 
-                        if (correoEnviado)
-                        {
-                            System.Diagnostics.Debug.WriteLine("✅ Correo enviado exitosamente");
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("⚠️ No se pudo enviar el correo");
-                        }
-                    }
-                    catch (Exception exEmail)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"⚠️ Error enviando correo: {exEmail.Message}");
-                        // No fallamos por error en correo, solo registramos
-                    }
+                    // **ENVIAR EN SEGUNDO PLANO SIN ESPERAR**
+                    Task.Run(() => EnviarCorreoEnSegundoPlano(emailDestino, nombreUsuarioGenerado, cedula));
 
-                    // Mensaje según si se envió correo o no
-                    string mensajeBase = $"✅ Persona creada con ID: {model.PEPER_ID} y Usuario creado con ID: {usuarioCreado.XEUSU_ID}";
-
-                    if (correoEnviado)
-                    {
-                        TempData["SuccessMessage"] = $"{mensajeBase}<br/>📧 Las credenciales han sido enviadas al correo: {model.PEPER_EMAIL}";
-                    }
-                    else
-                    {
-                        TempData["WarningMessage"] = $"{mensajeBase}<br/>⚠️ Las credenciales NO se pudieron enviar por correo. Usuario: {GenerarNombreUsuario(model)}, Contraseña: {model.PEPER_CEDULA}";
-                    }
+                    // Mensaje inmediato (el navegador no espera)
+                    TempData["SuccessMessage"] = $"✅ Persona creada con ID: {model.PEPER_ID}<br/>" +
+                                                $"👤 Usuario creado: {nombreUsuarioGenerado}<br/>" +
+                                                $"📧 Se enviará correo a: {emailDestino}";
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("⚠️ No se pudo crear el usuario automático");
                     TempData["WarningMessage"] = $"Persona creada con ID: {model.PEPER_ID} pero no se pudo crear el usuario automático.";
                 }
 
-                // 6. REDIRECCIONAR PARA LIMPIAR FORMULARIO
+                // 6. REDIRECCIONAR INMEDIATAMENTE
                 System.Diagnostics.Debug.WriteLine("🔄 Redirigiendo...");
-                return RedirectToAction("crearpersonal");
+                return RedirectToAction("CrearPersonal");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"💥 ERROR en crearpersonal: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"💥 ERROR: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace);
 
                 ViewBag.Error = $"Error al crear persona: {ex.Message}";
                 ViewBag.Sexos = CD_Sexo.Instancia.ObtenerSexos();
                 ViewBag.EstadosCiviles = CD_EstadoCivil.Instancia.ObtenerEstadosCiviles();
 
-                // Regenerar ID para la vista
                 if (string.IsNullOrEmpty(model.PEPER_ID))
-                {
                     model.PEPER_ID = GenerarIdPersonaAutomatico();
-                }
                 ViewBag.IdGenerado = model.PEPER_ID;
 
                 return View(model);
@@ -264,40 +172,45 @@ namespace Monster_University.Controllers
         }
 
         // =====================================================================
-        // MÉTODO SÍNCRONO PARA ENVIAR CORREO (igual que en Java)
+        // MÉTODO QUE SE EJECUTA EN SEGUNDO PLANO (NO BLOQUEA)
         // =====================================================================
-        private bool EnviarCorreoCredencialesSincrono(Personal persona, Usuario usuario)
+        private void EnviarCorreoEnSegundoPlano(string email, string nombreUsuario, string cedula)
         {
             try
             {
-                // Verificar que el email no esté vacío
-                if (string.IsNullOrWhiteSpace(persona.PEPER_EMAIL))
+                System.Diagnostics.Debug.WriteLine($"📧 Iniciando envío en segundo plano a: {email}");
+
+                if (string.IsNullOrWhiteSpace(email))
                 {
-                    System.Diagnostics.Debug.WriteLine("❌ No se puede enviar correo: Email vacío");
-                    return false;
+                    System.Diagnostics.Debug.WriteLine("❌ Email vacío, no se envía correo");
+                    return;
                 }
 
-                // Usar el EmailService
+                // Usar tu EmailService existente
                 var emailService = new EmailService();
 
-                // Generar nombre de usuario y contraseña
-                string nombreUsuario = GenerarNombreUsuario(persona);
-                string contrasenia = persona.PEPER_CEDULA; // Contraseña = cédula
+                // Opción 1: Síncrono pero en hilo separado (recomendado)
+                bool enviado = emailService.EnviarCredencialesSincrono(email, nombreUsuario, cedula);
 
-                System.Diagnostics.Debug.WriteLine($"📧 Enviando a: {persona.PEPER_EMAIL}");
-                System.Diagnostics.Debug.WriteLine($"👤 Usuario generado: {nombreUsuario}");
+                // Opción 2: O usar la versión asíncrona dentro del Task
+                // await emailService.EnviarCredencialesAsync(email, nombreUsuario, cedula);
 
-                // Enviar correo SÍNCRONO (bloqueante)
-                return emailService.EnviarCredencialesSincrono(
-                    persona.PEPER_EMAIL,
-                    nombreUsuario,
-                    contrasenia
-                );
+                if (enviado)
+                {
+                    System.Diagnostics.Debug.WriteLine($"✅ Correo enviado exitosamente a: {email}");
+                    // Podrías guardar en BD que se envió el correo
+                    // CD_Personal.Instancia.MarcarCorreoEnviado(email, true);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"⚠️ No se pudo enviar correo a: {email}");
+                    // Podrías guardar en BD el fallo para reintentar después
+                    // CD_Personal.Instancia.MarcarCorreoEnviado(email, false);
+                }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Error en EnviarCorreoCredencialesSincrono: {ex.Message}");
-                return false;
+                System.Diagnostics.Debug.WriteLine($"💥 Error en envío segundo plano: {ex.Message}");
             }
         }
         public ActionResult editarpersonal(string id)

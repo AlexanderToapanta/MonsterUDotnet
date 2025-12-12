@@ -377,3 +377,6 @@ C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\Mo
 C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\Monster_University\obj\Debug\Monster_.D4F5933A.Up2Date
 C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\Monster_University\obj\Debug\Monster_University.dll
 C:\Users\DELL\Documents\PROYECTO_WEB_DOTNET\MonsterUDotnet\Monster_University\Monster_University\obj\Debug\Monster_University.pdb
+C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\Monster_University\bin\BouncyCastle.Crypto.dll
+C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\Monster_University\bin\itextsharp.dll
+C:\Users\Usuario\Documents\MonsterUniversityDotnet\MonsterUDotnet\Monster_University\Monster_University\bin\itextsharp.xml

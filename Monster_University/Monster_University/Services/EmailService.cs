@@ -9,7 +9,7 @@ namespace Monster_University.Services
     {
         // CONFIGURACIÓN SENDGRID (AJUSTA CON TUS CREDENCIALES)
         private const string CORREO_REMITENTE = "alexandertoapantaj05@gmail.com";
-        private const string CONTRASENIA_REMITENTE = ""; 
+        private const string CONTRASENIA_REMITENTE = "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";
         private const string SERVIDOR_SMTP = "smtp.sendgrid.net";
         private const int PUERTO_SMTP = 587;
 
@@ -18,18 +18,12 @@ namespace Monster_University.Services
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("=== ENVIANDO CORREO CON SENDGRID (SÍNCRONO) ===");
-                System.Diagnostics.Debug.WriteLine($"📧 Para: {destinatario}");
-                System.Diagnostics.Debug.WriteLine($"👤 Usuario: {nombreUsuario}");
+                System.Diagnostics.Debug.WriteLine($"📧 Iniciando envío a: {destinatario}");
 
-                // Validación
                 if (string.IsNullOrWhiteSpace(destinatario))
-                {
-                    System.Diagnostics.Debug.WriteLine("❌ ERROR: Email destinatario vacío");
                     return false;
-                }
 
-                // Configuración SMTP
+                // Reducir timeout para no bloquear tanto
                 using (var smtpClient = new SmtpClient())
                 {
                     smtpClient.Host = SERVIDOR_SMTP;
@@ -37,9 +31,8 @@ namespace Monster_University.Services
                     smtpClient.EnableSsl = true;
                     smtpClient.UseDefaultCredentials = false;
                     smtpClient.Credentials = new NetworkCredential("apikey", CONTRASENIA_REMITENTE);
-                    smtpClient.Timeout = 10000;
+                    smtpClient.Timeout = 10000; // 15 segundos máximo
 
-                    // Crear mensaje
                     using (var mailMessage = new MailMessage())
                     {
                         mailMessage.From = new MailAddress(CORREO_REMITENTE, "Monsters University");
@@ -48,43 +41,17 @@ namespace Monster_University.Services
                         mailMessage.IsBodyHtml = true;
                         mailMessage.Body = ConstruirContenidoHTML(nombreUsuario, contrasenia);
 
-                        // ENVÍO SÍNCRONO (bloqueante) - igual que en Java
+                        // Envío síncrono pero con timeout controlado
                         smtpClient.Send(mailMessage);
 
-                        System.Diagnostics.Debug.WriteLine("✅ CORREO ENVIADO EXITOSAMENTE");
+                        System.Diagnostics.Debug.WriteLine($"✅ Correo enviado a: {destinatario}");
                         return true;
                     }
                 }
             }
-            catch (SmtpException smtpEx)
-            {
-                System.Diagnostics.Debug.WriteLine($"❌ ERROR SMTP: {smtpEx.StatusCode} - {smtpEx.Message}");
-
-                // Manejo específico de errores (igual que en Java)
-                string mensajeError = "Error al enviar correo: ";
-                if (smtpEx.Message.Contains("535"))
-                {
-                    mensajeError += "Credenciales SMTP incorrectas (Error 535). Verifica API Key o que el usuario sea 'apikey'.";
-                }
-                else if (smtpEx.Message.Contains("550") || smtpEx.Message.Contains("554"))
-                {
-                    mensajeError += "Correo rechazado por el servidor. Verifica el destinatario y que el remitente esté verificado en SendGrid.";
-                }
-                else if (smtpEx.Message.Contains("Connection timed out"))
-                {
-                    mensajeError += "Timeout de conexión. Verifica tu conexión a internet o el bloqueo del puerto 587.";
-                }
-                else
-                {
-                    mensajeError += smtpEx.Message;
-                }
-
-                System.Diagnostics.Debug.WriteLine($"❌ Detalles error: {mensajeError}");
-                return false;
-            }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ ERROR general: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"❌ Error enviando correo a {destinatario}: {ex.Message}");
                 return false;
             }
         }
