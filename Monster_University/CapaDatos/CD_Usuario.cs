@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CapaModelo;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -28,18 +29,20 @@ namespace CapaDatos
             }
         }
 
-        // CORREGIDO: Encriptar contraseña antes de comparar
-        public int LoginUsuario(string XEUSU_NOMBRE, string XEUSU_CONTRA)
+        // Método de login
+        public Tuple<int, string, string> LoginUsuario(string XEUSU_NOMBRE, string XEUSU_CONTRA)
         {
             int respuesta = 0;
+            string rolId = "";
+            string usuarioId = "";
+
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
                 try
                 {
-                    // ¡IMPORTANTE! Encriptar la contraseña recibida
                     string contrasenaEncriptada = Encriptar(XEUSU_CONTRA);
 
-                    string query = @"SELECT XEUSU_ID 
+                    string query = @"SELECT XEUSU_ID, XEROL_ID 
                                    FROM XEUSU_USUAR 
                                    WHERE XEUSU_NOMBRE = @XEUSU_NOMBRE 
                                    AND XEUSU_CONTRA = @XEUSU_CONTRA 
@@ -47,19 +50,27 @@ namespace CapaDatos
 
                     SqlCommand cmd = new SqlCommand(query, oConexion);
                     cmd.Parameters.AddWithValue("@XEUSU_NOMBRE", XEUSU_NOMBRE);
-                    cmd.Parameters.AddWithValue("@XEUSU_CONTRA", contrasenaEncriptada); // Usar encriptada
+                    cmd.Parameters.AddWithValue("@XEUSU_CONTRA", contrasenaEncriptada);
 
                     oConexion.Open();
 
-                    object result = cmd.ExecuteScalar();
-                    respuesta = (result != null && !string.IsNullOrEmpty(result.ToString())) ? 1 : 0;
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            respuesta = 1;
+                            usuarioId = dr["XEUSU_ID"]?.ToString();
+                            rolId = dr["XEROL_ID"]?.ToString();
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
                     respuesta = 0;
+                    System.Diagnostics.Debug.WriteLine("Error en LoginUsuario: " + ex.Message);
                 }
             }
-            return respuesta;
+            return Tuple.Create(respuesta, usuarioId, rolId);
         }
 
         public Usuario ObtenerDetalleUsuario(string XEUSU_ID)
@@ -67,7 +78,7 @@ namespace CapaDatos
             Usuario rptUsuario = new Usuario();
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
-                string query = @"SELECT XEUSU_ID, PEPER_ID, MECARR_ID, MEEST_ID, 
+                string query = @"SELECT XEUSU_ID, XEROL_ID, PEPER_ID, MECARR_ID, MEEST_ID, 
                                         XEUSU_NOMBRE, XEUSU_CONTRA, XEUSU_ESTADO
                                  FROM XEUSU_USUAR 
                                  WHERE XEUSU_ID = @XEUSU_ID";
@@ -85,6 +96,7 @@ namespace CapaDatos
                         rptUsuario = new Usuario()
                         {
                             XEUSU_ID = dr["XEUSU_ID"]?.ToString(),
+                            XEROL_ID = dr["XEROL_ID"]?.ToString(),
                             PEPER_ID = dr["PEPER_ID"]?.ToString(),
                             MECARR_ID = dr["MECARR_ID"]?.ToString(),
                             MEEST_ID = dr["MEEST_ID"]?.ToString(),
@@ -103,6 +115,7 @@ namespace CapaDatos
                 catch (Exception ex)
                 {
                     rptUsuario = null;
+                    System.Diagnostics.Debug.WriteLine("Error en ObtenerDetalleUsuario: " + ex.Message);
                     return rptUsuario;
                 }
             }
@@ -113,7 +126,7 @@ namespace CapaDatos
             List<Usuario> rptListaUsuario = new List<Usuario>();
             using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
-                string query = @"SELECT XEUSU_ID, PEPER_ID, MECARR_ID, MEEST_ID, 
+                string query = @"SELECT XEUSU_ID, XEROL_ID, PEPER_ID, MECARR_ID, MEEST_ID, 
                                         XEUSU_NOMBRE, XEUSU_CONTRA, XEUSU_ESTADO
                                  FROM XEUSU_USUAR 
                                  ORDER BY XEUSU_ID";
@@ -130,6 +143,7 @@ namespace CapaDatos
                         rptListaUsuario.Add(new Usuario()
                         {
                             XEUSU_ID = dr["XEUSU_ID"]?.ToString(),
+                            XEROL_ID = dr["XEROL_ID"]?.ToString(),
                             PEPER_ID = dr["PEPER_ID"]?.ToString(),
                             MECARR_ID = dr["MECARR_ID"]?.ToString(),
                             MEEST_ID = dr["MEEST_ID"]?.ToString(),
@@ -144,6 +158,7 @@ namespace CapaDatos
                 catch (Exception ex)
                 {
                     rptListaUsuario = null;
+                    System.Diagnostics.Debug.WriteLine("Error en ObtenerUsuarios: " + ex.Message);
                     return rptListaUsuario;
                 }
             }
@@ -159,10 +174,10 @@ namespace CapaDatos
                     string contrasenaEncriptada = Encriptar(oUsuario.XEUSU_CONTRA);
 
                     string query = @"INSERT INTO XEUSU_USUAR 
-                                    (XEUSU_ID, PEPER_ID, MECARR_ID, MEEST_ID, 
+                                    (XEUSU_ID, XEROL_ID, PEPER_ID, MECARR_ID, MEEST_ID, 
                                      XEUSU_NOMBRE, XEUSU_CONTRA, XEUSU_ESTADO)
                                      VALUES 
-                                    (@XEUSU_ID, @PEPER_ID, @MECARR_ID, @MEEST_ID, 
+                                    (@XEUSU_ID, @XEROL_ID, @PEPER_ID, @MECARR_ID, @MEEST_ID, 
                                      @XEUSU_NOMBRE, @XEUSU_CONTRA, @XEUSU_ESTADO)";
 
                     SqlCommand cmd = new SqlCommand(query, oConexion);
@@ -175,6 +190,8 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("@XEUSU_ESTADO", oUsuario.XEUSU_ESTADO);
 
                     // Parámetros FK
+                    cmd.Parameters.AddWithValue("@XEROL_ID",
+                        string.IsNullOrEmpty(oUsuario.XEROL_ID) ? (object)DBNull.Value : oUsuario.XEROL_ID);
                     cmd.Parameters.AddWithValue("@PEPER_ID",
                         string.IsNullOrEmpty(oUsuario.PEPER_ID) ? (object)DBNull.Value : oUsuario.PEPER_ID);
                     cmd.Parameters.AddWithValue("@MECARR_ID",
@@ -202,18 +219,16 @@ namespace CapaDatos
             {
                 try
                 {
-                    // Si se está cambiando la contraseña, encriptarla
                     string contrasenaParaGuardar = oUsuario.XEUSU_CONTRA;
-                    // Verificar si la contraseña ya está encriptada (más de 5 caracteres y contiene caracteres especiales)
-                    // Si no está encriptada, encriptarla
-                    if (!string.IsNullOrEmpty(oUsuario.XEUSU_CONTRA) && oUsuario.XEUSU_CONTRA.Length > 0)
+
+                    // Solo encriptar si no parece estar ya encriptada
+                    if (!string.IsNullOrEmpty(oUsuario.XEUSU_CONTRA) && oUsuario.XEUSU_CONTRA.Length < 50)
                     {
-                        // Una forma simple de verificar si ya está encriptada
-                        // (esto es un ejemplo básico, puedes mejorar esta lógica)
                         contrasenaParaGuardar = Encriptar(oUsuario.XEUSU_CONTRA);
                     }
 
                     string query = @"UPDATE XEUSU_USUAR SET 
+                                    XEROL_ID = @XEROL_ID,
                                     PEPER_ID = @PEPER_ID,
                                     MECARR_ID = @MECARR_ID,
                                     MEEST_ID = @MEEST_ID,
@@ -231,6 +246,8 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("@XEUSU_ESTADO", oUsuario.XEUSU_ESTADO);
 
                     // Parámetros FK
+                    cmd.Parameters.AddWithValue("@XEROL_ID",
+                        string.IsNullOrEmpty(oUsuario.XEROL_ID) ? (object)DBNull.Value : oUsuario.XEROL_ID);
                     cmd.Parameters.AddWithValue("@PEPER_ID",
                         string.IsNullOrEmpty(oUsuario.PEPER_ID) ? (object)DBNull.Value : oUsuario.PEPER_ID);
                     cmd.Parameters.AddWithValue("@MECARR_ID",
@@ -245,6 +262,7 @@ namespace CapaDatos
                 catch (Exception ex)
                 {
                     respuesta = false;
+                    System.Diagnostics.Debug.WriteLine("Error en ModificarUsuario: " + ex.Message);
                 }
             }
             return respuesta;
@@ -257,14 +275,6 @@ namespace CapaDatos
             {
                 try
                 {
-                    // Primero eliminar relaciones en XR_XEUSU_XEROL
-                    string queryEliminarRoles = @"DELETE FROM XR_XEUSU_XEROL 
-                                                  WHERE XEUSU_ID = @XEUSU_ID";
-
-                    SqlCommand cmdRoles = new SqlCommand(queryEliminarRoles, oConexion);
-                    cmdRoles.Parameters.AddWithValue("@XEUSU_ID", XEUSU_ID);
-
-                    // Luego eliminar el usuario
                     string queryEliminarUsuario = @"DELETE FROM XEUSU_USUAR 
                                                     WHERE XEUSU_ID = @XEUSU_ID";
 
@@ -272,65 +282,188 @@ namespace CapaDatos
                     cmdUsuario.Parameters.AddWithValue("@XEUSU_ID", XEUSU_ID);
 
                     oConexion.Open();
-
-                    // Ejecutar en transacción
-                    using (SqlTransaction transaction = oConexion.BeginTransaction())
-                    {
-                        try
-                        {
-                            cmdRoles.Transaction = transaction;
-                            cmdUsuario.Transaction = transaction;
-
-                            cmdRoles.ExecuteNonQuery();
-                            int rowsAffected = cmdUsuario.ExecuteNonQuery();
-
-                            transaction.Commit();
-                            respuesta = rowsAffected > 0;
-                        }
-                        catch
-                        {
-                            transaction.Rollback();
-                            respuesta = false;
-                        }
-                    }
+                    int rowsAffected = cmdUsuario.ExecuteNonQuery();
+                    respuesta = rowsAffected > 0;
                 }
                 catch (Exception ex)
                 {
                     respuesta = false;
+                    System.Diagnostics.Debug.WriteLine("Error en EliminarUsuario: " + ex.Message);
                 }
             }
             return respuesta;
         }
 
-        public string Encriptar(string str)
+        // Método para obtener usuarios con información detallada (incluye nombres)
+        public List<Usuario> ObtenerUsuariosDetallados()
         {
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
-            char remplaza;
-            string re_incrementa = "";
-            for (int i = 0; i < str.Length; i++)
+            List<Usuario> rptListaUsuario = new List<Usuario>();
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
-                remplaza = (char)((int)str[i] + 5);
-                re_incrementa = re_incrementa + remplaza.ToString();
+                string query = @"SELECT U.XEUSU_ID, U.XEROL_ID, U.PEPER_ID, U.MECARR_ID, U.MEEST_ID, 
+                                        U.XEUSU_NOMBRE, U.XEUSU_CONTRA, U.XEUSU_ESTADO,
+                                        R.XEROL_NOMBRE,
+                                        P.PEPER_NOMBRE + ' ' + P.PEPER_APELLIDO AS PersonaNombre,
+                                        C.MECARR_NOMBRE
+                                 FROM XEUSU_USUAR U
+                                 LEFT JOIN XEROL_ROL R ON U.XEROL_ID = R.XEROL_ID
+                                 LEFT JOIN PEPER_PERSON P ON U.PEPER_ID = P.PEPER_ID
+                                 LEFT JOIN MECARR_CARRERA C ON U.MECARR_ID = C.MECARR_ID
+                                 ORDER BY U.XEUSU_ID";
+
+                SqlCommand cmd = new SqlCommand(query, oConexion);
+
+                try
+                {
+                    oConexion.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        rptListaUsuario.Add(new Usuario()
+                        {
+                            XEUSU_ID = dr["XEUSU_ID"]?.ToString(),
+                            XEROL_ID = dr["XEROL_ID"]?.ToString(),
+                            PEPER_ID = dr["PEPER_ID"]?.ToString(),
+                            MECARR_ID = dr["MECARR_ID"]?.ToString(),
+                            MEEST_ID = dr["MEEST_ID"]?.ToString(),
+                            XEUSU_NOMBRE = dr["XEUSU_NOMBRE"]?.ToString(),
+                            XEUSU_CONTRA = dr["XEUSU_CONTRA"]?.ToString(),
+                            XEUSU_ESTADO = dr["XEUSU_ESTADO"]?.ToString(),
+                            
+                           
+                        });
+                    }
+                    dr.Close();
+                    return rptListaUsuario;
+                }
+                catch (Exception ex)
+                {
+                    rptListaUsuario = null;
+                    System.Diagnostics.Debug.WriteLine("Error en ObtenerUsuariosDetallados: " + ex.Message);
+                    return rptListaUsuario;
+                }
             }
-            return re_incrementa;
         }
 
-        public string DesEncriptar(string str)
+        // Método para buscar usuarios
+        public List<Usuario> BuscarUsuario(string criterio, string valor)
         {
-            if (string.IsNullOrEmpty(str)) return string.Empty;
-
-            char remplaza;
-            string re_incrementa = "";
-            for (int i = 0; i < str.Length; i++)
+            List<Usuario> rptListaUsuario = new List<Usuario>();
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
             {
-                remplaza = (char)((int)str[i] - 5);
-                re_incrementa = re_incrementa + remplaza.ToString();
+                try
+                {
+                    string query = @"SELECT XEUSU_ID, XEROL_ID, PEPER_ID, MECARR_ID, MEEST_ID, 
+                                            XEUSU_NOMBRE, XEUSU_CONTRA, XEUSU_ESTADO
+                                     FROM XEUSU_USUAR 
+                                     WHERE ";
+
+                    switch (criterio.ToUpper())
+                    {
+                        case "NOMBRE":
+                            query += "XEUSU_NOMBRE LIKE @VALOR";
+                            break;
+                        case "ESTADO":
+                            query += "XEUSU_ESTADO = @VALOR";
+                            break;
+                        case "ROL":
+                            query += "XEROL_ID = @VALOR";
+                            break;
+                        case "PERSONAL":
+                            query += "PEPER_ID = @VALOR";
+                            break;
+                        case "ESTUDIANTE":
+                            query += "MEEST_ID IS NOT NULL AND MECARR_ID = @VALOR";
+                            break;
+                        default:
+                            query += "XEUSU_NOMBRE LIKE @VALOR";
+                            break;
+                    }
+
+                    query += " ORDER BY XEUSU_ID";
+
+                    SqlCommand cmd = new SqlCommand(query, oConexion);
+
+                    if (criterio.ToUpper() == "NOMBRE")
+                    {
+                        cmd.Parameters.AddWithValue("@VALOR", "%" + valor + "%");
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@VALOR", valor);
+                    }
+
+                    oConexion.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        rptListaUsuario.Add(new Usuario()
+                        {
+                            XEUSU_ID = dr["XEUSU_ID"]?.ToString(),
+                            XEROL_ID = dr["XEROL_ID"]?.ToString(),
+                            PEPER_ID = dr["PEPER_ID"]?.ToString(),
+                            MECARR_ID = dr["MECARR_ID"]?.ToString(),
+                            MEEST_ID = dr["MEEST_ID"]?.ToString(),
+                            XEUSU_NOMBRE = dr["XEUSU_NOMBRE"]?.ToString(),
+                            XEUSU_CONTRA = dr["XEUSU_CONTRA"]?.ToString(),
+                            XEUSU_ESTADO = dr["XEUSU_ESTADO"]?.ToString()
+                        });
+                    }
+                    dr.Close();
+                }
+                catch (Exception ex)
+                {
+                    rptListaUsuario = null;
+                    System.Diagnostics.Debug.WriteLine("Error en BuscarUsuario: " + ex.Message);
+                }
             }
-            return re_incrementa;
+            return rptListaUsuario;
         }
 
-        // CORREGIDO: Encriptar contraseña actual antes de verificar
+        // Validar que el nombre de usuario sea único
+        public bool ValidarUsuarioUnico(string XEUSU_NOMBRE, string XEUSU_ID_EXCLUIR = null)
+        {
+            bool esUnico = true;
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+            {
+                try
+                {
+                    string query;
+                    SqlCommand cmd;
+
+                    if (string.IsNullOrEmpty(XEUSU_ID_EXCLUIR))
+                    {
+                        query = @"SELECT COUNT(*) FROM XEUSU_USUAR 
+                                   WHERE XEUSU_NOMBRE = @XEUSU_NOMBRE";
+                        cmd = new SqlCommand(query, oConexion);
+                        cmd.Parameters.AddWithValue("@XEUSU_NOMBRE", XEUSU_NOMBRE);
+                    }
+                    else
+                    {
+                        query = @"SELECT COUNT(*) FROM XEUSU_USUAR 
+                                   WHERE XEUSU_NOMBRE = @XEUSU_NOMBRE 
+                                   AND XEUSU_ID != @XEUSU_ID";
+                        cmd = new SqlCommand(query, oConexion);
+                        cmd.Parameters.AddWithValue("@XEUSU_NOMBRE", XEUSU_NOMBRE);
+                        cmd.Parameters.AddWithValue("@XEUSU_ID", XEUSU_ID_EXCLUIR);
+                    }
+
+                    oConexion.Open();
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    esUnico = count == 0;
+                }
+                catch (Exception ex)
+                {
+                    esUnico = false;
+                    System.Diagnostics.Debug.WriteLine("Error en ValidarUsuarioUnico: " + ex.Message);
+                }
+            }
+            return esUnico;
+        }
+
+        // Método para cambiar contraseña
         public int CambiarClave(string XEUSU_NOMBRE, string XEUSU_CONTRA, string nuevaClave)
         {
             int res = 0;
@@ -377,9 +510,114 @@ namespace CapaDatos
                 catch (Exception ex)
                 {
                     res = 0;
+                    System.Diagnostics.Debug.WriteLine("Error en CambiarClave: " + ex.Message);
                 }
             }
             return res;
+        }
+
+        // Métodos de encriptación
+        public string Encriptar(string str)
+        {
+            if (string.IsNullOrEmpty(str)) return string.Empty;
+
+            char remplaza;
+            string re_incrementa = "";
+            for (int i = 0; i < str.Length; i++)
+            {
+                remplaza = (char)((int)str[i] + 5);
+                re_incrementa = re_incrementa + remplaza.ToString();
+            }
+            return re_incrementa;
+        }
+
+        public string DesEncriptar(string str)
+        {
+            if (string.IsNullOrEmpty(str)) return string.Empty;
+
+            char remplaza;
+            string re_incrementa = "";
+            for (int i = 0; i < str.Length; i++)
+            {
+                remplaza = (char)((int)str[i] - 5);
+                re_incrementa = re_incrementa + remplaza.ToString();
+            }
+            return re_incrementa;
+        }
+
+        // Método para obtener los roles disponibles
+        public List<Rol> ObtenerRolesDisponibles()
+        {
+            List<Rol> listaRoles = new List<Rol>();
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+            {
+                string query = @"SELECT XEROL_ID, XEROL_NOMBRE 
+                                 FROM XEROL_ROL 
+                                 ORDER BY XEROL_NOMBRE";
+
+                SqlCommand cmd = new SqlCommand(query, oConexion);
+
+                try
+                {
+                    oConexion.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        listaRoles.Add(new Rol()
+                        {
+                            XEROL_ID = dr["XEROL_ID"]?.ToString(),
+                            XEROL_NOMBRE = dr["XEROL_NOMBRE"]?.ToString()
+                        });
+                    }
+                    dr.Close();
+                }
+                catch (Exception ex)
+                {
+                    listaRoles = null;
+                    System.Diagnostics.Debug.WriteLine("Error en ObtenerRolesDisponibles: " + ex.Message);
+                }
+            }
+            return listaRoles;
+        }
+
+        // Método para obtener personal disponible (sin usuario asignado)
+        public List<Personal> ObtenerPersonalDisponible()
+        {
+            List<Personal> listaPersonal = new List<Personal>();
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+            {
+                string query = @"SELECT P.PEPER_ID, P.PEPER_NOMBRE, P.PEPER_APELLIDO
+                                 FROM PEPER_PERSON P
+                                 LEFT JOIN XEUSU_USUAR U ON P.PEPER_ID = U.PEPER_ID
+                                 WHERE U.PEPER_ID IS NULL
+                                 ORDER BY P.PEPER_NOMBRE, P.PEPER_APELLIDO";
+
+                SqlCommand cmd = new SqlCommand(query, oConexion);
+
+                try
+                {
+                    oConexion.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        listaPersonal.Add(new Personal()
+                        {
+                            PEPER_ID = dr["PEPER_ID"]?.ToString(),
+                            PEPER_NOMBRE = dr["PEPER_NOMBRE"]?.ToString(),
+                            PEPER_APELLIDO = dr["PEPER_APELLIDO"]?.ToString()
+                        });
+                    }
+                    dr.Close();
+                }
+                catch (Exception ex)
+                {
+                    listaPersonal = null;
+                    System.Diagnostics.Debug.WriteLine("Error en ObtenerPersonalDisponible: " + ex.Message);
+                }
+            }
+            return listaPersonal;
         }
     }
 }

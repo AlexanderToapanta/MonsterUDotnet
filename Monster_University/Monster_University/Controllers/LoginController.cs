@@ -85,7 +85,10 @@ namespace Monster_University.Controllers
                     return response;
                 }
 
-                int resultado = CD_Usuario.Instancia.LoginUsuario(XEUSU_NOMBRE, XEUSU_CONTRA);
+                // El método ahora devuelve Tuple<int, string, string>
+                // Solo necesitamos el primer valor (int) que indica si el login fue exitoso (1) o no (0)
+                var resultadoTupla = CD_Usuario.Instancia.LoginUsuario(XEUSU_NOMBRE, XEUSU_CONTRA);
+                int resultado = resultadoTupla.Item1; // Extraemos solo el valor entero
 
                 response.estado = resultado > 0;
                 response.objeto = resultado;

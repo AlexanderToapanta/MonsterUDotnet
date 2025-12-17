@@ -44,6 +44,7 @@
     <Compile Include="Carrera.cs" />
     <Compile Include="EstadoCivil.cs" />
     <Compile Include="Personal.cs" />
+    <Compile Include="Rol.cs" />
     <Compile Include="Sexo.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

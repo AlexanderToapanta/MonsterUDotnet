@@ -211,6 +211,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ControladorCarreraController.cs" />
     <Compile Include="Controllers\ControladorPersonalController.cs" />
+    <Compile Include="Controllers\ControladorRolController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ControladorUsuarioController.cs" />
     <Compile Include="Services\EmailService.cs" />
@@ -321,6 +322,8 @@
     <Content Include="Views\ControladorCarrera\Lista.cshtml" />
     <Content Include="Views\ControladorPersonal\crearpersonal.cshtml" />
     <Content Include="Views\ControladorCarrera\Reporte.cshtml" />
+    <Content Include="Views\ControladorRol\GestionarRol.cshtml" />
+    <Content Include="Views\ControladorRol\AsignarRol.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

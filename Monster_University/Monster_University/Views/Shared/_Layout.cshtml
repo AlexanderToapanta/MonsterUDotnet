@@ -139,7 +139,7 @@
                         <button class="btn btn-secondary dropdown-toggle menu-btn" type="button" data-bs-toggle="dropdown">
                             Finanzas
                         </button>
-                        <!-- Aquí irían los items del menú Finanzas -->
+                       
                     </div>
 
                     <!-- ACADÉMICO -->
@@ -162,7 +162,17 @@
                         <button class="btn btn-secondary dropdown-toggle menu-btn" type="button" data-bs-toggle="dropdown">
                             Seguridad
                         </button>
-                        <!-- Aquí irían los items del menú Seguridad -->
+                        <ul class="dropdown-menu">
+                            <li>
+                                @Html.ActionLink("🆕 Gestionar Roles", "GestionarRol",
+                                     "ControladorRol", null, new { @class = "dropdown-item" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("🆕 Asignar Roles", "AsignarRol",
+                                     "ControladorRol", null, new { @class = "dropdown-item" })
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                        </ul>
                     </div>
 
                     <!-- USUARIO LOGUEADO -->

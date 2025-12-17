@@ -9,7 +9,7 @@ namespace Monster_University.Services
     {
         // CONFIGURACIÓN SENDGRID (AJUSTA CON TUS CREDENCIALES)
         private const string CORREO_REMITENTE = "alexandertoapantaj05@gmail.com";
-        private const string CONTRASENIA_REMITENTE = "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";
+        private const string CONTRASENIA_REMITENTE = "";
         private const string SERVIDOR_SMTP = "smtp.sendgrid.net";
         private const int PUERTO_SMTP = 587;
 

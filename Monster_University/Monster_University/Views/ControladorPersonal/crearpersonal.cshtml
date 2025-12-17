@@ -146,20 +146,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label fw-bold">
-                                            <i class="fas fa-phone me-1"></i>Celular:
-                                        </label>
-                                        @Html.TextBoxFor(m => m.PEPER_CELULAR, new
-                                        {
-                                            @class = "form-control",
-                                            placeholder = "Ej: 0991234567 (opcional)",
-                                            maxlength = "15"
-                                        })
-                                        <small class="text-muted">(Opcional, formato: 09XXXXXXXX)</small>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -323,6 +310,20 @@
                                             required = "required"
                                         })
                                         <small class="text-muted">(Máximo 30 caracteres)</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">
+                                                <i class="fas fa-phone me-1"></i>Celular:
+                                            </label>
+                                            @Html.TextBoxFor(m => m.PEPER_CELULAR, new
+                                            {
+                                                @class = "form-control",
+                                                placeholder = "Ej: 0991234567 (opcional)",
+                                                maxlength = "15"
+                                            })
+                                            <small class="text-muted">(Opcional, formato: 09XXXXXXXX)</small>
+                                        </div>
                                     </div>
 
                                     <!-- Nota informativa -->

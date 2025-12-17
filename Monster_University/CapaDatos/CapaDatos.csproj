@@ -44,6 +44,7 @@
     <Compile Include="CD_Carrera.cs" />
     <Compile Include="CD_EstadoCivilcs.cs" />
     <Compile Include="CD_Personal.cs" />
+    <Compile Include="CD_Rol.cs" />
     <Compile Include="CD_Sexo.cs" />
     <Compile Include="CD_Usuario.cs" />
     <Compile Include="Conexion.cs" />

@@ -1,6 +1,7 @@
 ﻿public class Usuario
 {
     public string XEUSU_ID { get; set; }
+    public string XEROL_ID { get; set; }
     public string PEPER_ID { get; set; }
     public string MECARR_ID { get; set; }
     public string MEEST_ID { get; set; }
