@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="CD_Carrera.cs" />
     <Compile Include="CD_EstadoCivilcs.cs" />
+    <Compile Include="CD_Opcion.cs" />
+    <Compile Include="CD_OpcionRoles.cs" />
     <Compile Include="CD_Personal.cs" />
     <Compile Include="CD_Rol.cs" />
     <Compile Include="CD_Sexo.cs" />

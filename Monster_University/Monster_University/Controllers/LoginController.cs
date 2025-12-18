@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Security;
 using CapaDatos;
-
+using CapaModelo;
 
 namespace Monster_University.Controllers
 {
