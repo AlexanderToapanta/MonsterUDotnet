@@ -210,7 +210,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ControladorCarreraController.cs" />
-    <Compile Include="Controllers\ControladorOpRolesController.cs" />
     <Compile Include="Controllers\ControladorPersonalController.cs" />
     <Compile Include="Controllers\ControladorRolController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -325,7 +324,6 @@
     <Content Include="Views\ControladorCarrera\Reporte.cshtml" />
     <Content Include="Views\ControladorRol\GestionarRol.cshtml" />
     <Content Include="Views\ControladorRol\AsignarRol.cshtml" />
-    <Content Include="Views\ControladorOpRoles\AsignarOpRol.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

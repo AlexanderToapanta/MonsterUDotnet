@@ -209,6 +209,33 @@ namespace Monster_University.Controllers
             }
         }
 
+        // POST: ControladorRol/Eliminar/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Eliminar")]
+        public ActionResult EliminarConfirmado(string id)
+        {
+            try
+            {
+                var resultado = CD_Rol.Instancia.EliminarRol(id);
+
+                if (resultado)
+                {
+                    TempData["SuccessMessage"] = "Rol eliminado correctamente";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "No se pudo eliminar el rol. Verifique que no tenga usuarios asignados.";
+                }
+
+                return RedirectToAction("GestionarRol");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+                return RedirectToAction("GestionarRol");
+            }
+        }
 
         // GET: ControladorRol/Detalles/{id}
         public ActionResult Detalles(string id)
@@ -221,19 +248,8 @@ namespace Monster_University.Controllers
                     // Obtener usuarios con este rol
                     var usuarios = CD_Usuario.Instancia.ObtenerUsuarios();
                     var usuariosConRol = usuarios?.Where(u => u.XEROL_ID == id).ToList() ?? new List<Usuario>();
-
-                    // Obtener opciones asignadas a este rol
-                    var opcionesAsignadas = CD_Opcion.Instancia.ObtenerOpcionesPorRol(id);
-
-                    // Obtener información de dependencias
-                    var dependencias = CD_Rol.Instancia.ObtenerInformacionDependencias(id);
-
                     ViewBag.UsuariosConRol = usuariosConRol;
                     ViewBag.TotalUsuarios = usuariosConRol.Count;
-                    ViewBag.OpcionesAsignadas = opcionesAsignadas ?? new List<Opcion>();
-                    ViewBag.TotalOpciones = opcionesAsignadas?.Count ?? 0;
-                    ViewBag.UsuariosAsignados = dependencias.usuariosAsignados;
-                    ViewBag.OpcionesAsignadasCount = dependencias.opcionesAsignadas;
 
                     return View(rol);
                 }
@@ -242,55 +258,6 @@ namespace Monster_University.Controllers
                     TempData["ErrorMessage"] = "Rol no encontrado";
                     return RedirectToAction("GestionarRol");
                 }
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = $"Error: {ex.Message}";
-                return RedirectToAction("GestionarRol");
-            }
-        }
-
-        // POST: ControladorRol/Eliminar/{id}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ActionName("Eliminar")]
-        public ActionResult EliminarConfirmado(string id)
-        {
-            try
-            {
-                // Obtener información de dependencias primero
-                var dependencias = CD_Rol.Instancia.ObtenerInformacionDependencias(id);
-
-                if (dependencias.usuariosAsignados > 0 || dependencias.opcionesAsignadas > 0)
-                {
-                    string mensaje = "No se puede eliminar el rol porque tiene: ";
-                    List<string> problemas = new List<string>();
-
-                    if (dependencias.usuariosAsignados > 0)
-                        problemas.Add($"{dependencias.usuariosAsignados} usuario(s) asignado(s)");
-
-                    if (dependencias.opcionesAsignadas > 0)
-                        problemas.Add($"{dependencias.opcionesAsignadas} opción(es) asignada(s)");
-
-                    mensaje += string.Join(" y ", problemas);
-
-                    TempData["ErrorMessage"] = mensaje;
-                    return RedirectToAction("GestionarRol");
-                }
-
-                // Si no hay dependencias, proceder con la eliminación
-                var resultado = CD_Rol.Instancia.EliminarRol(id);
-
-                if (resultado)
-                {
-                    TempData["SuccessMessage"] = "Rol eliminado correctamente";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "No se pudo eliminar el rol.";
-                }
-
-                return RedirectToAction("GestionarRol");
             }
             catch (Exception ex)
             {
