@@ -181,31 +181,49 @@ namespace CapaDatos
                 try
                 {
                     // Verificar si hay usuarios con este rol
-                    string queryVerificar = @"SELECT COUNT(*) FROM XEUSU_USUAR 
+                    string queryVerificarUsuarios = @"SELECT COUNT(*) FROM XEUSU_USUAR 
                                                WHERE XEROL_ID = @XEROL_ID";
 
+                    // Verificar si hay opciones asignadas a este rol (tabla XR_XEROL_XEOPC)
+                    string queryVerificarOpciones = @"SELECT COUNT(*) FROM XR_XEROL_XEOPC 
+                                               WHERE XEROL_ID = @XEROL_ID
+                                               AND (XROP_FECHA_RETIRO IS NULL OR XROP_FECHA_RETIRO > GETDATE())";
+
                     string queryEliminar = @"DELETE FROM XEROL_ROL 
-                                               WHERE XEROL_ID = @XEROL_ID";
+                                       WHERE XEROL_ID = @XEROL_ID";
 
                     oConexion.Open();
 
-                    SqlCommand cmdVerificar = new SqlCommand(queryVerificar, oConexion);
-                    cmdVerificar.Parameters.AddWithValue("@XEROL_ID", XEROL_ID);
-                    int usuariosRelacionados = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+                    // Verificar usuarios
+                    SqlCommand cmdVerificarUsuarios = new SqlCommand(queryVerificarUsuarios, oConexion);
+                    cmdVerificarUsuarios.Parameters.AddWithValue("@XEROL_ID", XEROL_ID);
+                    int usuariosRelacionados = Convert.ToInt32(cmdVerificarUsuarios.ExecuteScalar());
 
                     if (usuariosRelacionados > 0)
                     {
                         respuesta = false;
                         System.Diagnostics.Debug.WriteLine("No se puede eliminar rol con usuarios asignados.");
+                        return respuesta;
                     }
-                    else
-                    {
-                        SqlCommand cmdEliminar = new SqlCommand(queryEliminar, oConexion);
-                        cmdEliminar.Parameters.AddWithValue("@XEROL_ID", XEROL_ID);
 
-                        int rowsAffected = cmdEliminar.ExecuteNonQuery();
-                        respuesta = rowsAffected > 0;
+                    // Verificar opciones asignadas
+                    SqlCommand cmdVerificarOpciones = new SqlCommand(queryVerificarOpciones, oConexion);
+                    cmdVerificarOpciones.Parameters.AddWithValue("@XEROL_ID", XEROL_ID);
+                    int opcionesAsignadas = Convert.ToInt32(cmdVerificarOpciones.ExecuteScalar());
+
+                    if (opcionesAsignadas > 0)
+                    {
+                        respuesta = false;
+                        System.Diagnostics.Debug.WriteLine("No se puede eliminar rol con opciones asignadas. Retire primero las opciones del rol.");
+                        return respuesta;
                     }
+
+                    // Si no hay ni usuarios ni opciones asignadas, eliminar el rol
+                    SqlCommand cmdEliminar = new SqlCommand(queryEliminar, oConexion);
+                    cmdEliminar.Parameters.AddWithValue("@XEROL_ID", XEROL_ID);
+
+                    int rowsAffected = cmdEliminar.ExecuteNonQuery();
+                    respuesta = rowsAffected > 0;
                 }
                 catch (Exception ex)
                 {
@@ -215,7 +233,40 @@ namespace CapaDatos
             }
             return respuesta;
         }
+        public (int usuariosAsignados, int opcionesAsignadas) ObtenerInformacionDependencias(string XEROL_ID)
+        {
+            int usuariosAsignados = 0;
+            int opcionesAsignadas = 0;
 
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+            {
+                try
+                {
+                    oConexion.Open();
+
+                    // Contar usuarios asignados
+                    string queryUsuarios = @"SELECT COUNT(*) FROM XEUSU_USUAR 
+                                      WHERE XEROL_ID = @XEROL_ID";
+                    SqlCommand cmdUsuarios = new SqlCommand(queryUsuarios, oConexion);
+                    cmdUsuarios.Parameters.AddWithValue("@XEROL_ID", XEROL_ID);
+                    usuariosAsignados = Convert.ToInt32(cmdUsuarios.ExecuteScalar());
+
+                    // Contar opciones asignadas (activas)
+                    string queryOpciones = @"SELECT COUNT(*) FROM XR_XEROL_XEOPC 
+                                      WHERE XEROL_ID = @XEROL_ID
+                                      AND (XROP_FECHA_RETIRO IS NULL OR XROP_FECHA_RETIRO > GETDATE())";
+                    SqlCommand cmdOpciones = new SqlCommand(queryOpciones, oConexion);
+                    cmdOpciones.Parameters.AddWithValue("@XEROL_ID", XEROL_ID);
+                    opcionesAsignadas = Convert.ToInt32(cmdOpciones.ExecuteScalar());
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error en ObtenerInformacionDependencias: " + ex.Message);
+                }
+            }
+
+            return (usuariosAsignados, opcionesAsignadas);
+        }
         public List<Rol> BuscarRol(string criterio, string valor)
         {
             List<Rol> rptListaRoles = new List<Rol>();

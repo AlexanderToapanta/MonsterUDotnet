@@ -3,28 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|c:\\users\\usuario\\documents\\monsteruniversitydotnet\\monsterudotnet\\monster_university\\monster_university\\views\\controladorrol\\asignarrol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\controladorrol\\asignarrol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\controllers\\controladorrolcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\controllers\\controladorrolcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\controllers\\controladorpersonalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\controllers\\controladorpersonalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\views\\controladorrol\\gestionarrol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\controladorrol\\gestionarrol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capamodelo\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|solutionrelative:capamodelo\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capadatos\\cd_usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\cd_usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -35,8 +23,64 @@
       "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\controladorpersonal\\crearpersonal.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|c:\\users\\usuario\\documents\\monsteruniversitydotnet\\monsterudotnet\\monster_university\\monster_university\\views\\controladoroproles\\asignaroprol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\controladoroproles\\asignaroprol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capamodelo\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|solutionrelative:capamodelo\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\views\\controladorrol\\asignarrol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\controladorrol\\asignarrol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|c:\\users\\usuario\\documents\\monsteruniversitydotnet\\monsterudotnet\\monster_university\\monster_university\\controllers\\controladoroprolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\controllers\\controladoroprolescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|c:\\users\\usuario\\documents\\monsteruniversitydotnet\\monsterudotnet\\monster_university\\monster_university\\controllers\\controladorrolcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\controllers\\controladorrolcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\views\\controladorrol\\gestionarrol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\controladorrol\\gestionarrol.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\controllers\\controladorpersonalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\controllers\\controladorpersonalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capadatos\\cd_rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\cd_rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|c:\\users\\usuario\\documents\\monsteruniversitydotnet\\monsterudotnet\\monster_university\\capamodelo\\opcion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|solutionrelative:capamodelo\\opcion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|c:\\users\\usuario\\documents\\monsteruniversitydotnet\\monsterudotnet\\monster_university\\capamodelo\\opcionrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|solutionrelative:capamodelo\\opcionrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|c:\\users\\usuario\\documents\\monsteruniversitydotnet\\monsterudotnet\\monster_university\\capadatos\\cd_opcionroles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\cd_opcionroles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|c:\\users\\usuario\\documents\\monsteruniversitydotnet\\monsterudotnet\\monster_university\\capadatos\\cd_opcion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\cd_opcion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capamodelo\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|solutionrelative:capamodelo\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\views\\controladorcarrera\\lista.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -47,32 +91,12 @@
       "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\controllers\\controladorusuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capadatos\\cd_usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\cd_usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capadatos\\cd_rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\cd_rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capamodelo\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E552CA39-FA8F-40FC-8F52-76B2C23CD087}|CapaModelo\\CapaModelo.csproj|solutionrelative:capamodelo\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capadatos\\conexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\conexion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\capadatos\\cd_personal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{51AA9F46-6D17-4DA7-AFCF-BE941145936E}|CapaDatos\\CapaDatos.csproj|solutionrelative:capadatos\\cd_personal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\monster_university\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0ACDA5ED-A0F5-43E2-9DA5-E0EE34936451}|Monster_University\\Monster_University.csproj|solutionrelative:monster_university\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -81,8 +105,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 349,
-          "SelectedChildIndex": 1,
+          "DockedHeight": 298,
+          "SelectedChildIndex": 24,
           "Children": [
             {
               "$type": "Bookmark",
@@ -90,106 +114,85 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AsignarRol.cshtml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorRol\\AsignarRol.cshtml",
-              "RelativeDocumentMoniker": "Monster_University\\Views\\ControladorRol\\AsignarRol.cshtml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorRol\\AsignarRol.cshtml*",
-              "RelativeToolTip": "Monster_University\\Views\\ControladorRol\\AsignarRol.cshtml*",
-              "ViewState": "AgIAADgBAAAAAAAAAAAAADoAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-17T15:44:42.298Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "Monster_University\\Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "Monster_University\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAASAAAAAAAAAA==",
+              "Title": "AsignarOpRol.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorOpRoles\\AsignarOpRol.cshtml",
+              "RelativeDocumentMoniker": "Monster_University\\Views\\ControladorOpRoles\\AsignarOpRol.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorOpRoles\\AsignarOpRol.cshtml",
+              "RelativeToolTip": "Monster_University\\Views\\ControladorOpRoles\\AsignarOpRol.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-17T15:42:49.389Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Monster_University\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Monster_University\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAJAAAAAAAAAAAAAAAK4AAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-17T15:28:20.557Z"
+              "WhenOpened": "2025-12-18T19:02:13.785Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "LoginController.cs",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\LoginController.cs",
-              "RelativeDocumentMoniker": "Monster_University\\Controllers\\LoginController.cs",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\LoginController.cs",
-              "RelativeToolTip": "Monster_University\\Controllers\\LoginController.cs",
-              "ViewState": "AgIAAEYAAAAAAAAAAAAUwGYAAAAJAAAAAAAAAA==",
+              "Title": "ControladorOpRolesController.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\ControladorOpRolesController.cs",
+              "RelativeDocumentMoniker": "Monster_University\\Controllers\\ControladorOpRolesController.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\ControladorOpRolesController.cs",
+              "RelativeToolTip": "Monster_University\\Controllers\\ControladorOpRolesController.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA0wCQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-17T15:22:14.65Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "GestionarRol.cshtml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorRol\\GestionarRol.cshtml",
-              "RelativeDocumentMoniker": "Monster_University\\Views\\ControladorRol\\GestionarRol.cshtml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorRol\\GestionarRol.cshtml",
-              "RelativeToolTip": "Monster_University\\Views\\ControladorRol\\GestionarRol.cshtml",
-              "ViewState": "AgIAAFMBAAAAAAAAAAAcwGcBAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-17T15:21:04.599Z",
+              "WhenOpened": "2025-12-18T19:01:22.212Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Lista.cshtml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorCarrera\\Lista.cshtml",
-              "RelativeDocumentMoniker": "Monster_University\\Views\\ControladorCarrera\\Lista.cshtml",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorCarrera\\Lista.cshtml",
-              "RelativeToolTip": "Monster_University\\Views\\ControladorCarrera\\Lista.cshtml",
-              "ViewState": "AgIAAO0AAAAAAAAAAAAmwBEBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-17T15:11:31.132Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ControladorRolController.cs",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\ControladorRolController.cs",
-              "RelativeDocumentMoniker": "Monster_University\\Controllers\\ControladorRolController.cs",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\ControladorRolController.cs*",
-              "RelativeToolTip": "Monster_University\\Controllers\\ControladorRolController.cs*",
-              "ViewState": "AgIAAEMBAAAAAAAAAAAAwFcBAAArAAAAAAAAAA==",
+              "DocumentIndex": 15,
+              "Title": "OpcionRol.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaModelo\\OpcionRol.cs",
+              "RelativeDocumentMoniker": "CapaModelo\\OpcionRol.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaModelo\\OpcionRol.cs",
+              "RelativeToolTip": "CapaModelo\\OpcionRol.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-17T15:07:21.385Z",
+              "WhenOpened": "2025-12-18T18:58:21.301Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
-              "Title": "Usuario.cs",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaModelo\\Usuario.cs",
-              "RelativeDocumentMoniker": "CapaModelo\\Usuario.cs",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaModelo\\Usuario.cs",
-              "RelativeToolTip": "CapaModelo\\Usuario.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Title": "Opcion.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaModelo\\Opcion.cs",
+              "RelativeDocumentMoniker": "CapaModelo\\Opcion.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaModelo\\Opcion.cs",
+              "RelativeToolTip": "CapaModelo\\Opcion.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-17T14:40:29.603Z"
+              "WhenOpened": "2025-12-18T18:58:06.057Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 16,
+              "Title": "CD_OpcionRoles.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\CD_OpcionRoles.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\CD_OpcionRoles.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\CD_OpcionRoles.cs",
+              "RelativeToolTip": "CapaDatos\\CD_OpcionRoles.cs",
+              "ViewState": "AgIAAAQBAAAAAAAAAAAcwBIBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-18T18:57:29.486Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "CD_Opcion.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\CD_Opcion.cs",
+              "RelativeDocumentMoniker": "CapaDatos\\CD_Opcion.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\CD_Opcion.cs",
+              "RelativeToolTip": "CapaDatos\\CD_Opcion.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-18T18:55:28.868Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
               "Title": "Rol.cs",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaModelo\\Rol.cs",
               "RelativeDocumentMoniker": "CapaModelo\\Rol.cs",
@@ -202,19 +205,122 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AsignarRol.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorRol\\AsignarRol.cshtml",
+              "RelativeDocumentMoniker": "Monster_University\\Views\\ControladorRol\\AsignarRol.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorRol\\AsignarRol.cshtml",
+              "RelativeToolTip": "Monster_University\\Views\\ControladorRol\\AsignarRol.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAH8AAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-17T15:44:42.298Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Monster_University\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Monster_University\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-17T15:42:49.389Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Monster_University\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Monster_University\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAKwBAAAAAAAAAAAmwMoBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-17T15:28:20.557Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "Monster_University\\Controllers\\LoginController.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "Monster_University\\Controllers\\LoginController.cs",
+              "ViewState": "AgIAAAYBAAAAAAAAAAAswBoBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T15:22:14.65Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "GestionarRol.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorRol\\GestionarRol.cshtml",
+              "RelativeDocumentMoniker": "Monster_University\\Views\\ControladorRol\\GestionarRol.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorRol\\GestionarRol.cshtml",
+              "RelativeToolTip": "Monster_University\\Views\\ControladorRol\\GestionarRol.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGcBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-17T15:21:04.599Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Lista.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorCarrera\\Lista.cshtml",
+              "RelativeDocumentMoniker": "Monster_University\\Views\\ControladorCarrera\\Lista.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorCarrera\\Lista.cshtml",
+              "RelativeToolTip": "Monster_University\\Views\\ControladorCarrera\\Lista.cshtml",
+              "ViewState": "AgIAAO0AAAAAAAAAAAAmwBEBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-17T15:11:31.132Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ControladorRolController.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\ControladorRolController.cs",
+              "RelativeDocumentMoniker": "Monster_University\\Controllers\\ControladorRolController.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\ControladorRolController.cs",
+              "RelativeToolTip": "Monster_University\\Controllers\\ControladorRolController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABEAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T15:07:21.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaModelo\\Usuario.cs",
+              "RelativeDocumentMoniker": "CapaModelo\\Usuario.cs",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaModelo\\Usuario.cs",
+              "RelativeToolTip": "CapaModelo\\Usuario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-17T14:40:29.603Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 12,
               "Title": "CD_Rol.cs",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\CD_Rol.cs",
               "RelativeDocumentMoniker": "CapaDatos\\CD_Rol.cs",
               "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\CD_Rol.cs",
               "RelativeToolTip": "CapaDatos\\CD_Rol.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcBAAA/AAAAAAAAAA==",
+              "ViewState": "AgIAAOcAAAAAAAAAAAAUwAwBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-17T14:16:11.242Z"
+              "WhenOpened": "2025-12-17T14:16:11.242Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 21,
               "Title": "ControladorUsuarioController.cs",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\ControladorUsuarioController.cs",
               "RelativeDocumentMoniker": "Monster_University\\Controllers\\ControladorUsuarioController.cs",
@@ -226,19 +332,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 14,
               "Title": "EmailService.cs",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Services\\EmailService.cs",
               "RelativeDocumentMoniker": "Monster_University\\Services\\EmailService.cs",
               "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Services\\EmailService.cs",
               "RelativeToolTip": "Monster_University\\Services\\EmailService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-11T20:24:06.483Z"
+              "WhenOpened": "2025-12-11T20:24:06.483Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 11,
               "Title": "ControladorPersonalController.cs",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Controllers\\ControladorPersonalController.cs",
               "RelativeDocumentMoniker": "Monster_University\\Controllers\\ControladorPersonalController.cs",
@@ -251,7 +358,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 23,
               "Title": "CD_Personal.cs",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\CD_Personal.cs",
               "RelativeDocumentMoniker": "CapaDatos\\CD_Personal.cs",
@@ -263,7 +370,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "crearpersonal.cshtml",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\ControladorPersonal\\crearpersonal.cshtml",
               "RelativeDocumentMoniker": "Monster_University\\Views\\ControladorPersonal\\crearpersonal.cshtml",
@@ -271,11 +378,12 @@
               "RelativeToolTip": "Monster_University\\Views\\ControladorPersonal\\crearpersonal.cshtml",
               "ViewState": "AgIAAGgDAAAAAAAAAAAowHIDAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-08T14:52:19.971Z"
+              "WhenOpened": "2025-12-08T14:52:19.971Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 22,
               "Title": "Conexion.cs",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\Conexion.cs",
               "RelativeDocumentMoniker": "CapaDatos\\Conexion.cs",
@@ -287,32 +395,34 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 2,
               "Title": "CD_Usuario.cs",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\CD_Usuario.cs",
               "RelativeDocumentMoniker": "CapaDatos\\CD_Usuario.cs",
               "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\CapaDatos\\CD_Usuario.cs",
               "RelativeToolTip": "CapaDatos\\CD_Usuario.cs",
-              "ViewState": "AgIAADwBAAAAAAAAAAAuwEwBAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAowEkAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T19:22:49.495Z"
+              "WhenOpened": "2025-12-07T19:22:49.495Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 0,
               "Title": "Login.cshtml",
               "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Login\\Login.cshtml",
               "RelativeDocumentMoniker": "Monster_University\\Views\\Login\\Login.cshtml",
               "ToolTip": "C:\\Users\\Usuario\\Documents\\MonsterUniversityDotnet\\MonsterUDotnet\\Monster_University\\Monster_University\\Views\\Login\\Login.cshtml",
               "RelativeToolTip": "Monster_University\\Views\\Login\\Login.cshtml",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB0AAAAHAAAAAAAAAA==",
+              "ViewState": "AgIAAP4AAAAAAAAAAAAmwAQBAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-07T16:15:53.755Z"
+              "WhenOpened": "2025-12-07T16:15:53.755Z",
+              "EditorCaption": ""
             }
           ]
         },
         {
-          "DockedHeight": 19,
+          "DockedHeight": 70,
           "SelectedChildIndex": -1,
           "Children": [
             {

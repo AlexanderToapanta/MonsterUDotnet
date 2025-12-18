@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="Carrera.cs" />
     <Compile Include="EstadoCivil.cs" />
+    <Compile Include="Opcion.cs" />
+    <Compile Include="OpcionRol.cs" />
     <Compile Include="Personal.cs" />
     <Compile Include="Rol.cs" />
     <Compile Include="Sexo.cs" />

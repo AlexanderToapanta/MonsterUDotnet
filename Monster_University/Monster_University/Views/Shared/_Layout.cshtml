@@ -1,21 +1,48 @@
 ﻿@{
     Layout = null;
-    var usuario = ViewBag.UsuarioLogueado;
+
+    // Obtener datos directamente de la sesión
+    var usuario = Session["Usuario"] as CapaModelo.Usuario;
+    var opciones = Session["OpcionesUsuario"] as List<CapaModelo.Opcion>;
+
+    // Funciones auxiliares locales
+    bool TienePermiso(string codigoOpcion)
+    {
+        return opciones?.Exists(o => o.XEOPC_ID == codigoOpcion) ?? false;
+    }
+
+    bool TienePermisoEnGrupo(params string[] codigos)
+    {
+        if (opciones == null) return false;
+
+        foreach (var codigo in codigos)
+        {
+            if (opciones.Exists(o => o.XEOPC_ID == codigo))
+                return true;
+        }
+        return false;
+    }
+
+    bool TienePermisoPrefijo(string prefijo)
+    {
+        return opciones?.Exists(o => o.XEOPC_ID != null && o.XEOPC_ID.StartsWith(prefijo)) ?? false;
+    }
 }
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title</title>
+    <title>@ViewBag.Title - Monster University</title>
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- PrimeIcons -->
-    <link href="https://cdn.jsdelivr.net/npm/primeicons/primeicons.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- Estilos -->
+    <!-- Estilos personalizados -->
     <style>
         .layout-container {
             display: grid;
@@ -62,7 +89,6 @@
         .layout-content {
             position: relative;
             z-index: 1;
-            
         }
 
         .layout-south {
@@ -72,6 +98,7 @@
             padding: 0.5rem 1rem;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             z-index: 10;
         }
 
@@ -81,21 +108,29 @@
             color: #6C7BFF;
         }
 
-
-        .user-menu {
-            display: flex;
-            justify-content: center;
-            padding: 10px;
+        .menu-btn {
+            margin-left: 5px;
+            margin-right: 5px;
         }
 
-        .menu-form {
+        .user-menu {
             display: flex;
             gap: 10px;
             align-items: center;
         }
 
-            .menu-form .dropdown .dropdown-menu {
-                position: absolute;
+        .dropdown-menu {
+            min-width: 200px;
+        }
+
+        .opcion-inactiva {
+            color: #6c757d !important;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+            .opcion-inactiva:hover {
+                background-color: #f8f9fa !important;
             }
     </style>
 
@@ -111,106 +146,250 @@
             <!-- TÍTULO -->
             <div class="app-header">MONSTER UNIVERSITY</div>
 
-            <!-- MENÚS -->
+            <!-- MENÚS DINÁMICOS SEGÚN ROL Y OPCIONES -->
             <div class="user-menu">
-                <div class="menu-form d-flex align-items-center">
 
-                    <!-- HOME -->
+                <!-- HOME - Siempre visible si está logueado -->
+                @if (usuario != null)
+                {
                     <a href="@Url.Action("Index", "Home")" class="btn btn-primary menu-btn">
-                        <i class="pi pi-home"></i> Home
+                        <i class="fas fa-home"></i> Home
                     </a>
+                }
 
-                    <!-- PERSONAL -->
+                <!-- PERSONAL - Solo si tiene opciones que empiecen con PER -->
+                @if (usuario != null && TienePermisoPrefijo("PER"))
+                {
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle menu-btn" type="button" data-bs-toggle="dropdown">
-                            Personal
+                            <i class="fas fa-users"></i> Personal
                         </button>
                         <ul class="dropdown-menu">
-                            <li>
-                                @Html.ActionLink("🆕 Crear Personal", "crearpersonal",
-                                     "ControladorPersonal", null, new { @class = "dropdown-item" })
-                            </li>
-                            <li><hr class="dropdown-divider" /></li>
-                        </ul>
-                    </div>
 
-                    <!-- FINANZAS -->
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle menu-btn" type="button" data-bs-toggle="dropdown">
-                            Finanzas
-                        </button>
-                       
-                    </div>
-
-                    <!-- ACADÉMICO -->
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle menu-btn" type="button" data-bs-toggle="dropdown">
-                            Académico
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                @Html.ActionLink("📚 Administrar Carreras", "Lista", "ControladorCarrera", null, new { @class = "dropdown-item" })
-                            </li>
-                            <li>
-                                @Html.ActionLink("📝 Reporte de Carreras", "Reporte", "ControladorCarrera", null, new { @class = "dropdown-item" })
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- SEGURIDAD -->
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle menu-btn" type="button" data-bs-toggle="dropdown">
-                            Seguridad
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                @Html.ActionLink("🆕 Gestionar Roles", "GestionarRol",
-                                     "ControladorRol", null, new { @class = "dropdown-item" })
-                            </li>
-                            <li>
-                                @Html.ActionLink("🆕 Asignar Roles", "AsignarRol",
-                                     "ControladorRol", null, new { @class = "dropdown-item" })
-                            </li>
-                            <li><hr class="dropdown-divider" /></li>
-                        </ul>
-                    </div>
-
-                    <!-- USUARIO LOGUEADO -->
-                    @if (Session["Usuario"] != null)
-                    {
-                        <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle menu-btn"
-                                    data-bs-toggle="dropdown">
-                                <i class="pi pi-user"></i> @ViewBag.Usuario
-                            </button>
-
-                            <ul class="dropdown-menu">
+                            <!-- Crear Personal - Solo si tiene PER01 -->
+                            @if (TienePermiso("PER01"))
+                            {
                                 <li>
-                                    @Html.ActionLink("🔑 Cambiar Contraseña", "cambiarcontrasena",
-                                         "ControladorUsuario", null, new { @class = "dropdown-item" })
+                                    <a href="@Url.Action("crearpersonal", "ControladorPersonal")" class="dropdown-item">
+                                        <i class="fas fa-user-plus"></i> Crear Personal
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Ver Personal - Solo si tiene PER02 -->
+                            @if (TienePermiso("PER02"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("ListaPersonal", "ControladorPersonal")" class="dropdown-item">
+                                        <i class="fas fa-list"></i> Ver Personal
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Si no tiene opciones específicas -->
+                            @if (!TienePermisoEnGrupo("PER01", "PER02"))
+                            {
+                                <li><a class="dropdown-item opcion-inactiva" href="#"><i class="fas fa-lock"></i> Sin permisos</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <!-- FINANZAS - Solo si tiene opciones que empiecen con FIN -->
+                @if (usuario != null && TienePermisoPrefijo("FIN"))
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle menu-btn" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-money-bill"></i> Finanzas
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- Aquí irían las subopciones de Finanzas -->
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-file-invoice-dollar"></i> Reportes</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line"></i> Estadísticas</a></li>
+                        </ul>
+                    </div>
+                }
+
+                <!-- ACADÉMICO - Solo si tiene opciones que empiecen con ACA -->
+                @if (usuario != null && TienePermisoPrefijo("ACA"))
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle menu-btn" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-graduation-cap"></i> Académico
+                        </button>
+                        <ul class="dropdown-menu">
+
+                            <!-- Administrar Carreras - Solo si tiene ACA01 -->
+                            @if (TienePermiso("ACA01"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("Lista", "ControladorCarrera")" class="dropdown-item">
+                                        <i class="fas fa-book"></i> Administrar Carreras
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Reporte de Carreras - Solo si tiene ACA02 -->
+                            @if (TienePermiso("ACA02"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("Reporte", "ControladorCarrera")" class="dropdown-item">
+                                        <i class="fas fa-chart-bar"></i> Reporte de Carreras
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Gestión de Estudiantes - Solo si tiene ACA03 -->
+                            @if (TienePermiso("ACA03"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "ControladorEstudiante")" class="dropdown-item">
+                                        <i class="fas fa-user-graduate"></i> Gestión de Estudiantes
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Gestión de Grupos - Solo si tiene ACA04 -->
+                            @if (TienePermiso("ACA04"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "ControladorGrupo")" class="dropdown-item">
+                                        <i class="fas fa-chalkboard-teacher"></i> Gestión de Grupos
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Si no tiene opciones específicas -->
+                            @if (!TienePermisoEnGrupo("ACA01", "ACA02", "ACA03", "ACA04"))
+                            {
+                                <li><a class="dropdown-item opcion-inactiva" href="#"><i class="fas fa-lock"></i> Sin permisos académicos</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <!-- SEGURIDAD - Solo si tiene opciones que empiecen con SEG -->
+                @if (usuario != null && TienePermisoPrefijo("SEG"))
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle menu-btn" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-shield-alt"></i> Seguridad
+                        </button>
+                        <ul class="dropdown-menu">
+
+                            <!-- Gestionar Roles - Solo si tiene SEG01 -->
+                            @if (TienePermiso("SEG01"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("GestionarRol", "ControladorRol")" class="dropdown-item">
+                                        <i class="fas fa-user-tag"></i> Gestionar Roles
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Asignar Roles a Usuarios - Solo si tiene SEG02 -->
+                            @if (TienePermiso("SEG02"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("AsignarRol", "ControladorRol")" class="dropdown-item">
+                                        <i class="fas fa-link"></i> Asignar Roles a Usuarios
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Asignar Opciones a Roles - Solo si tiene SEG03 -->
+                            @if (TienePermiso("SEG03"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("AsignarOpRol", "ControladorOpRoles")" class="dropdown-item">
+                                        <i class="fas fa-cogs"></i> Asignar Opciones a Roles
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Gestionar Usuarios - Solo si tiene SEG04 -->
+                            @if (TienePermiso("SEG04"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "ControladorUsuario")" class="dropdown-item">
+                                        <i class="fas fa-users-cog"></i> Gestionar Usuarios
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Auditoría - Solo si tiene SEG05 -->
+                            @if (TienePermiso("SEG05"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index", "ControladorAuditoria")" class="dropdown-item">
+                                        <i class="fas fa-clipboard-list"></i> Auditoría
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Si no tiene opciones específicas -->
+                            @if (!TienePermisoEnGrupo("SEG01", "SEG02", "SEG03", "SEG04", "SEG05"))
+                            {
+                                <li><a class="dropdown-item opcion-inactiva" href="#"><i class="fas fa-lock"></i> Sin permisos de seguridad</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <!-- USUARIO LOGUEADO -->
+                @if (usuario != null)
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle menu-btn"
+                                data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i> @usuario.XEUSU_NOMBRE
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="@Url.Action("cambiarcontrasena", "ControladorUsuario")" class="dropdown-item">
+                                    <i class="fas fa-key"></i> Cambiar Contraseña
+                                </a>
+                            </li>
+
+                            <!-- Solo si tiene permiso SEG04 puede ver perfil -->
+                            @if (TienePermiso("SEG04"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("Detalles", "ControladorUsuario", new { id = usuario.XEUSU_ID })" class="dropdown-item">
+                                        <i class="fas fa-eye"></i> Ver Perfil
+                                    </a>
                                 </li>
                                 <li><hr class="dropdown-divider" /></li>
-                                
-                                <li>
-                                    @using (Html.BeginForm("Logout", "Login", FormMethod.Post, new { id = "logoutForm" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <a href="javascript:document.getElementById('logoutForm').submit();"
-                                           class="dropdown-item text-danger">
-                                            <i class="pi pi-sign-out"></i> Cerrar sesión
-                                        </a>
-                                    }
-                                </li>
-                            </ul>
-                        </div>
-                    }
-                    else
-                    {
-                        <!-- LOGIN SI NO ESTÁ LOGUEADO -->
-                        @Html.ActionLink("Iniciar Sesión", "Login", "Login",
-                        null, new { @class = "btn btn-primary menu-btn" })
-                    }
-                </div>
+                            }
+
+                            <!-- Información del rol -->
+                            @if (!string.IsNullOrEmpty(usuario.XEROL_ID))
+                            {
+                                <li><a class="dropdown-item disabled text-muted"><i class="fas fa-user-tag"></i> Rol: @usuario.XEROL_ID</a></li>
+                            }
+
+                            <li><hr class="dropdown-divider" /></li>
+
+                            <li>
+                                @using (Html.BeginForm("Logout", "Login", FormMethod.Post, new { id = "logoutForm" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <a href="javascript:document.getElementById('logoutForm').submit();"
+                                       class="dropdown-item text-danger">
+                                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                    </a>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <!-- LOGIN SI NO ESTÁ LOGUEADO -->
+                    <a href="@Url.Action("Login", "Login")" class="btn btn-primary menu-btn">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+                }
             </div>
         </div>
 
@@ -229,9 +408,23 @@
             }
             else
             {
-                <div class="text-muted small w-100 d-flex justify-content-between px-2">
-                    <span>&copy; @DateTime.Now.Year - Monster University</span>
-                    <span>Versión 1.0.0</span>
+                <div class="text-muted small">
+                    &copy; @DateTime.Now.Year - Monster University - Sistema de Gestión Académica
+                </div>
+                <div class="text-muted small">
+                    @if (usuario != null)
+                    {
+                        <span>Usuario: @usuario.XEUSU_NOMBRE</span>
+                        if (!string.IsNullOrEmpty(usuario.XEROL_ID))
+                        {
+                            <span> | Rol: @usuario.XEROL_ID</span>
+                        }
+                        <span> | Opciones activas: @(opciones?.Count ?? 0)</span>
+                    }
+                    else
+                    {
+                        <span>Sesión no iniciada</span>
+                    }
                 </div>
             }
         </div>
@@ -241,6 +434,40 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
+    <!-- Script para control de sesión -->
+    <script>
+        // Control de inactividad de sesión (30 minutos)
+        var sessionTimeout = 30 * 60 * 1000; // 30 minutos en milisegundos
+        var timeoutTimer;
+
+        function resetTimer() {
+            clearTimeout(timeoutTimer);
+            timeoutTimer = setTimeout(function() {
+                alert('Su sesión ha expirado por inactividad');
+                window.location.href = '@Url.Action("Login", "Login")';
+            }, sessionTimeout);
+        }
+
+        // Reiniciar timer con actividad del usuario
+        $(document).on('mousemove keypress click', resetTimer);
+
+        // Iniciar timer al cargar
+        $(document).ready(function() {
+            resetTimer();
+
+            // Mostrar tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+            // Control de permisos en tiempo real
+            $('.opcion-inactiva').click(function(e) {
+                e.preventDefault();
+                alert('No tiene permisos para acceder a esta opción');
+                return false;
+            });
+        });
+    </script>
 
     @RenderSection("scripts", required: false)
 
