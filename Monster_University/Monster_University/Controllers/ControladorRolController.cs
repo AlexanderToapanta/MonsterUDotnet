@@ -389,15 +389,11 @@ namespace Monster_University.Controllers
                 int asignados = 0;
                 foreach (var usuarioId in usuariosIds)
                 {
-                    var usuario = CD_Usuario.Instancia.ObtenerDetalleUsuario(usuarioId);
-                    if (usuario != null && string.IsNullOrEmpty(usuario.XEROL_ID))
+                    // Usar el nuevo método que solo actualiza el rol
+                    if (CD_Usuario.Instancia.ActualizarRolUsuario(usuarioId, rolId))
                     {
-                        usuario.XEROL_ID = rolId;
-                        if (CD_Usuario.Instancia.ModificarUsuario(usuario))
-                        {
-                            asignados++;
-                            Console.WriteLine($"Rol asignado a: {usuario.XEUSU_NOMBRE} ({usuarioId})");
-                        }
+                        asignados++;
+                        Console.WriteLine($"Rol asignado a usuario ID: {usuarioId}");
                     }
                 }
 
@@ -435,15 +431,11 @@ namespace Monster_University.Controllers
                 int quitados = 0;
                 foreach (var usuarioId in usuariosIds)
                 {
-                    var usuario = CD_Usuario.Instancia.ObtenerDetalleUsuario(usuarioId);
-                    if (usuario != null && usuario.XEROL_ID == rolId)
+                    // Usar el nuevo método que solo actualiza el rol (null para quitar)
+                    if (CD_Usuario.Instancia.ActualizarRolUsuario(usuarioId, null))
                     {
-                        usuario.XEROL_ID = null;
-                        if (CD_Usuario.Instancia.ModificarUsuario(usuario))
-                        {
-                            quitados++;
-                            Console.WriteLine($"Rol quitado de: {usuario.XEUSU_NOMBRE} ({usuarioId})");
-                        }
+                        quitados++;
+                        Console.WriteLine($"Rol quitado de usuario ID: {usuarioId}");
                     }
                 }
 
@@ -495,8 +487,8 @@ namespace Monster_University.Controllers
 
                     if (!sigueEnLista)
                     {
-                        usuarioOriginal.XEROL_ID = null;
-                        if (CD_Usuario.Instancia.ModificarUsuario(usuarioOriginal))
+                        // Usar el nuevo método para quitar el rol
+                        if (CD_Usuario.Instancia.ActualizarRolUsuario(usuarioOriginal.XEUSU_ID, null))
                         {
                             Console.WriteLine($"Rol quitado de: {usuarioOriginal.XEUSU_ID}");
                         }
@@ -512,14 +504,10 @@ namespace Monster_University.Controllers
 
                         if (!yaTieneRol)
                         {
-                            var usuario = CD_Usuario.Instancia.ObtenerDetalleUsuario(usuarioId);
-                            if (usuario != null)
+                            // Usar el nuevo método para asignar el rol
+                            if (CD_Usuario.Instancia.ActualizarRolUsuario(usuarioId, rolId))
                             {
-                                usuario.XEROL_ID = rolId;
-                                if (CD_Usuario.Instancia.ModificarUsuario(usuario))
-                                {
-                                    Console.WriteLine($"Rol asignado a: {usuario.XEUSU_ID}");
-                                }
+                                Console.WriteLine($"Rol asignado a: {usuarioId}");
                             }
                         }
                     }
@@ -534,7 +522,6 @@ namespace Monster_University.Controllers
                 return Json(new { success = false, message = $"Error: {ex.Message}" });
             }
         }
-
         // GET: ControladorRol/RegenerarId (Regenerar ID automático)
         [HttpPost]
         public JsonResult RegenerarId()

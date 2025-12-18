@@ -56,10 +56,9 @@
         white-space: nowrap;
     }
 
-    
     .user-count {
-        background-color: #fff !important; /* Fondo blanco */
-        color: #dc3545 !important; /* Color rojo para izquierda */
+        background-color: #fff !important;
+        color: #dc3545 !important;
         border: 1px solid #dc3545 !important;
         border-radius: 12px !important;
         padding: 3px 8px !important;
@@ -69,24 +68,49 @@
     }
 
     .table-right .user-count {
-        color: #198754 !important; /* Color verde para derecha */
+        color: #198754 !important;
         border-color: #198754 !important;
     }
 
-    /* Si el span dentro del header también necesita color */
-    .table-header span.badge {
-        background-color: #fff !important;
-        color: #000 !important;
-        font-weight: bold !important;
-    }
-
-    /* Estilos para el panel de información */
     .info-panel {
         background-color: #f8f9fa;
         border-left: 4px solid #007bff;
         padding: 15px;
         margin-bottom: 20px;
         border-radius: 5px;
+    }
+
+    /* Estilos para botones de confirmación */
+    .confirm-dialog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .confirm-content {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    /* Estilos para notificaciones */
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 300px;
+        display: none;
     }
 </style>
 
@@ -109,6 +133,26 @@
         </div>
     }
 
+    <!-- Notificación dinámica -->
+    <div id="notification" class="notification alert" role="alert">
+        <div class="d-flex justify-content-between align-items-center">
+            <span id="notificationMessage"></span>
+            <button type="button" class="btn-close" onclick="$('#notification').fadeOut()"></button>
+        </div>
+    </div>
+
+    <!-- Diálogo de confirmación -->
+    <div id="confirmDialog" class="confirm-dialog">
+        <div class="confirm-content">
+            <h5 id="confirmTitle" class="mb-3"><i class="fas fa-question-circle me-2"></i>Confirmar Acción</h5>
+            <p id="confirmMessage"></p>
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-secondary" onclick="closeConfirm()">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmActionBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Formulario principal -->
     @using (Html.BeginForm("AsignarRol", "ControladorRol", FormMethod.Post, new { id = "formAsignacion" }))
     {
@@ -119,8 +163,8 @@
             <label class="form-label fw-bold">Seleccionar Rol:</label>
             <div class="input-group" style="max-width: 400px;">
                 @Html.DropDownList("rolId", ViewBag.RolesSelectList as SelectList,
-      "-- Seleccione un rol --",
-      new { @class = "form-select", id = "rolSelect", required = "required" })
+                "-- Seleccione un rol --",
+                new { @class = "form-select", id = "rolSelect", required = "required" })
                 <button type="button" id="btnCargarUsuarios" class="btn btn-primary">
                     <i class="fas fa-sync me-1"></i>Cargar
                 </button>
@@ -199,6 +243,12 @@
                     <button type="button" id="btnQuitar" class="btn btn-warning move-button" disabled>
                         <i class="fas fa-arrow-left me-1"></i>Quitar
                     </button>
+                    <button type="button" id="btnAsignarInmediato" class="btn btn-success move-button" disabled style="margin-top: 10px;">
+                        <i class="fas fa-check me-1"></i>Asignar (BD)
+                    </button>
+                    <button type="button" id="btnQuitarInmediato" class="btn btn-warning move-button" disabled>
+                        <i class="fas fa-times me-1"></i>Quitar (BD)
+                    </button>
                 </div>
 
                 <!-- Tabla derecha: Usuarios CON rol -->
@@ -239,7 +289,7 @@
             <!-- Botones de acción -->
             <div class="mt-4 text-center">
                 <button type="button" id="btnGuardar" class="btn btn-primary" style="min-width: 200px;">
-                    <i class="fas fa-save me-1"></i>Guardar en Base de Datos
+                    <i class="fas fa-save me-1"></i>Guardar Todos los Cambios
                 </button>
                 <button type="button" id="btnLimpiar" class="btn btn-secondary" style="min-width: 200px;">
                     <i class="fas fa-refresh me-1"></i>Limpiar Selección
@@ -259,11 +309,38 @@
             var usuariosSeleccionadosSinRol = [];
             var usuariosSeleccionadosConRol = [];
 
+            // Función para mostrar notificación
+            function showNotification(message, type) {
+                var notification = $('#notification');
+                var notificationMessage = $('#notificationMessage');
+
+                notification.removeClass('alert-success alert-danger alert-warning alert-info');
+                notification.addClass('alert-' + type);
+                notificationMessage.text(message);
+
+                notification.fadeIn();
+                setTimeout(function() {
+                    notification.fadeOut();
+                }, 5000);
+            }
+
+            // Función para mostrar diálogo de confirmación
+            function showConfirm(title, message, action) {
+                $('#confirmTitle').text(title);
+                $('#confirmMessage').text(message);
+                $('#confirmActionBtn').off('click').on('click', action);
+                $('#confirmDialog').fadeIn();
+            }
+
+            function closeConfirm() {
+                $('#confirmDialog').fadeOut();
+            }
+
             // Cargar usuarios cuando se selecciona un rol
             $('#btnCargarUsuarios').on('click', function () {
                 rolSeleccionadoId = $('#rolSelect').val();
                 if (!rolSeleccionadoId) {
-                    alert('Por favor, seleccione un rol');
+                    showNotification('Por favor, seleccione un rol', 'warning');
                     return;
                 }
 
@@ -273,6 +350,10 @@
                     url: '@Url.Action("CargarUsuariosRol", "ControladorRol")',
                     type: 'POST',
                     data: { rolId: rolSeleccionadoId },
+                    beforeSend: function () {
+                        $('#btnCargarUsuarios').prop('disabled', true)
+                            .html('<i class="fas fa-spinner fa-spin me-1"></i>Cargando...');
+                    },
                     success: function (response) {
                         if (response.success) {
                             // Mostrar información del rol
@@ -301,14 +382,20 @@
                             console.log('✅ Usuarios cargados exitosamente');
                             console.log('Usuarios sin rol: ' + usuariosSinRol.length);
                             console.log('Usuarios con rol: ' + usuariosConRol.length);
+
+                            showNotification('Usuarios cargados correctamente', 'success');
                         } else {
-                            alert('Error: ' + response.message);
+                            showNotification('Error: ' + response.message, 'danger');
                             $('#infoPanel').hide();
                             $('#assignmentContainer').hide();
                         }
                     },
-                    error: function () {
-                        alert('Error al conectar con el servidor');
+                    error: function (xhr, status, error) {
+                        showNotification('Error al conectar con el servidor: ' + error, 'danger');
+                    },
+                    complete: function () {
+                        $('#btnCargarUsuarios').prop('disabled', false)
+                            .html('<i class="fas fa-sync me-1"></i>Cargar');
                     }
                 });
             });
@@ -389,6 +476,8 @@
                 // Habilitar/deshabilitar botones
                 $('#btnAsignar').prop('disabled', usuariosSeleccionadosSinRol.length === 0);
                 $('#btnQuitar').prop('disabled', usuariosSeleccionadosConRol.length === 0);
+                $('#btnAsignarInmediato').prop('disabled', usuariosSeleccionadosSinRol.length === 0);
+                $('#btnQuitarInmediato').prop('disabled', usuariosSeleccionadosConRol.length === 0);
 
                 // Actualizar checkboxes "seleccionar todos"
                 $('#selectAllSinRol').prop('checked',
@@ -400,10 +489,10 @@
                     usuariosSeleccionadosConRol.length === usuariosConRol.length);
             }
 
-            // Botón "Asignar" - mover de sin rol a con rol
+            // Botón "Asignar" - mover localmente (solo en la vista)
             $('#btnAsignar').on('click', function () {
                 if (usuariosSeleccionadosSinRol.length === 0) {
-                    alert('Seleccione usuarios para asignar');
+                    showNotification('Seleccione usuarios para asignar', 'warning');
                     return;
                 }
 
@@ -432,13 +521,13 @@
                 usuariosSeleccionadosSinRol = [];
                 actualizarSelecciones();
 
-                alert('Usuarios movidos a la lista de asignados');
+                showNotification('Usuarios movidos a la lista de asignados (localmente)', 'info');
             });
 
-            // Botón "Quitar" - mover de con rol a sin rol
+            // Botón "Quitar" - mover localmente (solo en la vista)
             $('#btnQuitar').on('click', function () {
                 if (usuariosSeleccionadosConRol.length === 0) {
-                    alert('Seleccione usuarios para quitar');
+                    showNotification('Seleccione usuarios para quitar', 'warning');
                     return;
                 }
 
@@ -467,19 +556,129 @@
                 usuariosSeleccionadosConRol = [];
                 actualizarSelecciones();
 
-                alert('Usuarios movidos a la lista de disponibles');
+                showNotification('Usuarios movidos a la lista de disponibles (localmente)', 'info');
             });
 
-            // Botón "Guardar" - persistir cambios en base de datos
+            // Botón "Asignar (BD)" - asignar inmediatamente en base de datos
+            $('#btnAsignarInmediato').on('click', function () {
+                if (usuariosSeleccionadosSinRol.length === 0) {
+                    showNotification('Seleccione usuarios para asignar', 'warning');
+                    return;
+                }
+
+                showConfirm(
+                    'Confirmar Asignación',
+                    '¿Está seguro de asignar el rol a ' + usuariosSeleccionadosSinRol.length + ' usuario(s)? Esto actualizará inmediatamente la base de datos.',
+                    function() {
+                        asignarUsuariosBD();
+                        closeConfirm();
+                    }
+                );
+            });
+
+            // Botón "Quitar (BD)" - quitar inmediatamente en base de datos
+            $('#btnQuitarInmediato').on('click', function () {
+                if (usuariosSeleccionadosConRol.length === 0) {
+                    showNotification('Seleccione usuarios para quitar', 'warning');
+                    return;
+                }
+
+                showConfirm(
+                    'Confirmar Eliminación',
+                    '¿Está seguro de quitar el rol a ' + usuariosSeleccionadosConRol.length + ' usuario(s)? Esto actualizará inmediatamente la base de datos.',
+                    function() {
+                        quitarUsuariosBD();
+                        closeConfirm();
+                    }
+                );
+            });
+
+            // Función para asignar usuarios en base de datos
+            function asignarUsuariosBD() {
+                $.ajax({
+                    url: '@Url.Action("AsignarUsuarios", "ControladorRol")',
+                    type: 'POST',
+                    data: {
+                        rolId: rolSeleccionadoId,
+                        usuariosIds: usuariosSeleccionadosSinRol
+                    },
+                    beforeSend: function () {
+                        $('#btnAsignarInmediato').prop('disabled', true)
+                            .html('<i class="fas fa-spinner fa-spin me-1"></i>Asignando...');
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            showNotification('✅ ' + response.message, 'success');
+                            // Recargar los datos actualizados
+                            $('#btnCargarUsuarios').click();
+                        } else {
+                            showNotification('❌ ' + response.message, 'danger');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        showNotification('Error al conectar con el servidor: ' + error, 'danger');
+                    },
+                    complete: function () {
+                        $('#btnAsignarInmediato').prop('disabled', false)
+                            .html('<i class="fas fa-check me-1"></i>Asignar (BD)');
+                    }
+                });
+            }
+
+            // Función para quitar usuarios en base de datos
+            function quitarUsuariosBD() {
+                $.ajax({
+                    url: '@Url.Action("QuitarUsuarios", "ControladorRol")',
+                    type: 'POST',
+                    data: {
+                        rolId: rolSeleccionadoId,
+                        usuariosIds: usuariosSeleccionadosConRol
+                    },
+                    beforeSend: function () {
+                        $('#btnQuitarInmediato').prop('disabled', true)
+                            .html('<i class="fas fa-spinner fa-spin me-1"></i>Quitando...');
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            showNotification('✅ ' + response.message, 'success');
+                            // Recargar los datos actualizados
+                            $('#btnCargarUsuarios').click();
+                        } else {
+                            showNotification('❌ ' + response.message, 'danger');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        showNotification('Error al conectar con el servidor: ' + error, 'danger');
+                    },
+                    complete: function () {
+                        $('#btnQuitarInmediato').prop('disabled', false)
+                            .html('<i class="fas fa-times me-1"></i>Quitar (BD)');
+                    }
+                });
+            }
+
+            // Botón "Guardar" - persistir TODOS los cambios en base de datos
             $('#btnGuardar').on('click', function () {
                 if (!rolSeleccionadoId) {
-                    alert('No hay rol seleccionado para guardar asignaciones');
+                    showNotification('No hay rol seleccionado para guardar asignaciones', 'warning');
                     return;
                 }
 
                 // Preparar IDs de usuarios con rol
                 var usuariosConRolIds = usuariosConRol.map(u => u.id);
 
+                showConfirm(
+                    'Guardar Todos los Cambios',
+                    '¿Está seguro de guardar todas las asignaciones actuales? Esto sobrescribirá cualquier asignación previa para este rol.',
+                    function() {
+                        guardarTodosLosCambios(usuariosConRolIds);
+                        closeConfirm();
+                    }
+                );
+            });
+
+            // Función para guardar todos los cambios
+            function guardarTodosLosCambios(usuariosConRolIds) {
                 $.ajax({
                     url: '@Url.Action("GuardarCambios", "ControladorRol")',
                     type: 'POST',
@@ -487,32 +686,61 @@
                         rolId: rolSeleccionadoId,
                         usuariosConRolIds: usuariosConRolIds
                     },
+                    beforeSend: function () {
+                        $('#btnGuardar').prop('disabled', true)
+                            .html('<i class="fas fa-spinner fa-spin me-1"></i>Guardando...');
+                    },
                     success: function (response) {
                         if (response.success) {
-                            alert('✅ ' + response.message);
+                            showNotification('✅ ' + response.message, 'success');
                             // Recargar los datos actualizados
                             $('#btnCargarUsuarios').click();
                         } else {
-                            alert('❌ ' + response.message);
+                            showNotification('❌ ' + response.message, 'danger');
                         }
                     },
-                    error: function () {
-                        alert('Error al conectar con el servidor');
+                    error: function (xhr, status, error) {
+                        showNotification('Error al conectar con el servidor: ' + error, 'danger');
+                    },
+                    complete: function () {
+                        $('#btnGuardar').prop('disabled', false)
+                            .html('<i class="fas fa-save me-1"></i>Guardar Todos los Cambios');
                     }
                 });
-            });
+            }
 
             // Botón "Limpiar" - resetear la selección
             $('#btnLimpiar').on('click', function () {
-                $('#rolSelect').val('');
-                $('#infoPanel').hide();
-                $('#assignmentContainer').hide();
-                usuariosSinRol = [];
-                usuariosConRol = [];
-                usuariosSeleccionadosSinRol = [];
-                usuariosSeleccionadosConRol = [];
-                rolSeleccionadoId = '';
-                console.log('Selección limpiada');
+                showConfirm(
+                    'Limpiar Selección',
+                    '¿Está seguro de limpiar toda la selección? Esto descartará todos los cambios no guardados.',
+                    function() {
+                        $('#rolSelect').val('');
+                        $('#infoPanel').hide();
+                        $('#assignmentContainer').hide();
+                        usuariosSinRol = [];
+                        usuariosConRol = [];
+                        usuariosSeleccionadosSinRol = [];
+                        usuariosSeleccionadosConRol = [];
+                        rolSeleccionadoId = '';
+                        showNotification('Selección limpiada correctamente', 'info');
+                        closeConfirm();
+                    }
+                );
+            });
+
+            // Cerrar diálogo de confirmación con ESC
+            $(document).keyup(function(e) {
+                if (e.key === "Escape") {
+                    closeConfirm();
+                }
+            });
+
+            // Cerrar diálogo al hacer clic fuera
+            $('#confirmDialog').click(function(e) {
+                if (e.target === this) {
+                    closeConfirm();
+                }
             });
         });
     </script>

@@ -619,5 +619,38 @@ namespace CapaDatos
             }
             return listaPersonal;
         }
+        public bool ActualizarRolUsuario(string usuarioId, string rolId)
+        {
+            bool respuesta = false;
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+            {
+                try
+                {
+                    string query = @"UPDATE XEUSU_USUAR 
+                                 SET XEROL_ID = @XEROL_ID
+                                 WHERE XEUSU_ID = @XEUSU_ID";
+
+                    SqlCommand cmd = new SqlCommand(query, oConexion);
+
+                    // Solo actualiza el rol
+                    cmd.Parameters.AddWithValue("@XEUSU_ID", usuarioId);
+
+                    if (string.IsNullOrEmpty(rolId))
+                        cmd.Parameters.AddWithValue("@XEROL_ID", DBNull.Value);
+                    else
+                        cmd.Parameters.AddWithValue("@XEROL_ID", rolId);
+
+                    oConexion.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    respuesta = rowsAffected > 0;
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                    System.Diagnostics.Debug.WriteLine("Error en ActualizarRolUsuario: " + ex.Message);
+                }
+            }
+            return respuesta;
+        }
     }
 }
