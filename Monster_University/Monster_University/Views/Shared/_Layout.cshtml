@@ -295,16 +295,7 @@
                                 </a>
                             </li>
 
-                            <!-- Si tiene permiso SEG puede ver perfil -->
-                            @if (TienePermiso("SEG"))
-                            {
-                                <li>
-                                    <a href="@Url.Action("Detalles", "ControladorUsuario", new { id = usuario.XEUSU_ID })" class="dropdown-item">
-                                        <i class="fas fa-eye"></i> Ver Perfil
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider" /></li>
-                            }
+                           
 
                             <!-- Información del rol -->
                             @if (!string.IsNullOrEmpty(usuario.XEROL_ID))

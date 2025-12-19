@@ -310,5 +310,93 @@ namespace CapaDatos
             }
             return esUnico;
         }
+        // Agrega estos métodos a tu clase CD_Rol existente
+
+        public bool RolExiste(string XEROL_ID)
+        {
+            bool existe = false;
+
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+            {
+                try
+                {
+                    string query = @"SELECT COUNT(*) FROM XEROL_ROL WHERE XEROL_ID = @XEROL_ID";
+
+                    SqlCommand cmd = new SqlCommand(query, oConexion);
+                    cmd.Parameters.AddWithValue("@XEROL_ID", XEROL_ID?.Trim() ?? "");
+
+                    oConexion.Open();
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    existe = count > 0;
+
+                    // PARA DEBUG
+                    System.Diagnostics.Debug.WriteLine($"CD_Rol.RolExiste('{XEROL_ID}'): {existe} (count: {count})");
+                }
+                catch (Exception ex)
+                {
+                    existe = false;
+                    System.Diagnostics.Debug.WriteLine($"ERROR CD_Rol.RolExiste: {ex.Message}");
+                }
+            }
+
+            return existe;
+        }
+
+        public List<Opcion> ObtenerOpcionesPorRol(string XEROL_ID)
+        {
+            List<Opcion> listaOpciones = new List<Opcion>();
+
+            using (SqlConnection oConexion = new SqlConnection(Conexion.CN))
+            {
+                try
+                {
+                    // PARA DEBUG
+                    System.Diagnostics.Debug.WriteLine($"=== CD_Rol.ObtenerOpcionesPorRol ===");
+                    System.Diagnostics.Debug.WriteLine($"Consultando opciones para rol: '{XEROL_ID}'");
+
+                    // Consulta que obtiene las opciones asignadas a un rol
+                    string query = @"
+                SELECT DISTINCT o.XEOPC_ID, o.XEOPC_NOMBRE
+                FROM xr_xerol_xeopc r_op
+                INNER JOIN xeopc_opcion o ON r_op.XEOPC_ID = o.XEOPC_ID
+                WHERE r_op.XEROL_ID = @XEROL_ID 
+                AND (r_op.XROP_FECHA_RETIRO IS NULL 
+                     OR r_op.XROP_FECHA_RETIRO > GETDATE())
+                ORDER BY o.XEOPC_ID";
+
+                    SqlCommand cmd = new SqlCommand(query, oConexion);
+                    cmd.Parameters.AddWithValue("@XEROL_ID", XEROL_ID?.Trim() ?? "");
+
+                    oConexion.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    int count = 0;
+                    while (dr.Read())
+                    {
+                        count++;
+                        string opcId = dr["XEOPC_ID"]?.ToString();
+                        string opcNombre = dr["XEOPC_NOMBRE"]?.ToString();
+
+                        listaOpciones.Add(new Opcion()
+                        {
+                            XEOPC_ID = opcId,
+                            XEOPC_NOMBRE = opcNombre
+                        });
+                        System.Diagnostics.Debug.WriteLine($"  Opción {count}: '{opcId}' - '{opcNombre}'");
+                    }
+                    dr.Close();
+
+                    System.Diagnostics.Debug.WriteLine($"Total opciones encontradas para rol '{XEROL_ID}': {count}");
+                }
+                catch (Exception ex)
+                {
+                    listaOpciones = new List<Opcion>();
+                    System.Diagnostics.Debug.WriteLine($"ERROR CD_Rol.ObtenerOpcionesPorRol: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+                }
+            }
+
+            return listaOpciones;
+        }
     }
 }
