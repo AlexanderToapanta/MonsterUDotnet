@@ -620,6 +620,7 @@ namespace Monster_University.Controllers
             }
         }
 
+
         // POST: ControladorRol/BuscarRol
         [HttpPost]
         public JsonResult BuscarRol(string criterio, string valor)
